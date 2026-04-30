@@ -181,8 +181,7 @@ marker_genes = {
 
 ### Preliminary Annotations 
 
-![](figures/umap_combined_celltypeON.png?v=1) 
+![](figures/umap_combined_celltypeON.png?v=2) 
 
-![](figures/umap_combined_celltype.png?v=1)
-
+![](figures/umap_combined_celltype.png?v=2)
 

@@ -8,6 +8,7 @@ leiden,celltype
 21,Keratinocyte
 23,Keratinocyte
 38,Keratinocyte
+42,Keratinocyte
 13,SMC
 32,SMC
 0,Fibroblast
@@ -34,3 +35,9 @@ leiden,celltype
 44,Synoviocyte
 48,Lymphatic_Endothelial
 35,Lymphatic_Endothelial
+34,Osteoclast
+29,Macrophage
+40,Macrophage
+47,Macrophage
+4,Macrophage
+3,Macrophage
