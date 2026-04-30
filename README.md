@@ -178,3 +178,11 @@ marker_genes = {
 <img src="figures/umap_combined_Ly6g.png?v=1" width="33%" />
 
 
+
+### Preliminary Annotations 
+
+![](figures/umap_combined_celltypeON.png?v=1) 
+
+![](figures/umap_combined_celltype.png?v=1)
+
+
