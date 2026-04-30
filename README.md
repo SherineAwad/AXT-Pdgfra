@@ -113,7 +113,7 @@ Biologically distinct samples !!
 <img src="figures/umap_combined_Cd44.png?v=1" width="33%" /><img src="figures/umap_combined_Spp1.png?v=1" width="33%" /><img src="figures/umap_combined_Nfatc1.png?v=1" width="33%" />
 <img src="figures/umap_combined_Rgs5.png?v=1" width="33%" /><img src="figures/umap_combined_Runx2.png?v=1" width="33%" /><img src="figures/umap_combined_Pecam1.png?v=1" width="33%" />
 <img src="figures/umap_combined_Postn.png?v=1" width="33%" /><img src="figures/umap_combined_Acta2.png?v=1" width="33%" /><img src="figures/umap_combined_Pmp22.png?v=1" width="33%" />
-<img src="figures/umap_combined_Ibsp.png?v=1" width="33%" /><img src="figures/umap_combined_Ctsk.png?v=1" width="33%" /><img src="figures/umap_combined_leiden.png?v=1" width="33%" />
+<img src="figures/umap_combined_Ibsp.png?v=1" width="33%" /><img src="figures/umap_combined_Ctsk.png?v=1" width="33%" /><img src="figures/umap_combined_Ly6g.png?v=1" width="33%" />
 <img src="figures/umap_combined_Mmp13.png?v=1" width="33%" /><img src="figures/umap_combined_Cspg4.png?v=1" width="33%" /><img src="figures/umap_combined_Cxcl12.png?v=1" width="33%" />
 <img src="figures/umap_combined_Pdgfrb.png?v=1" width="33%" /><img src="figures/umap_combined_Sox9.png?v=1" width="33%" /><img src="figures/umap_combined_Prg4.png?v=1" width="33%" />
 <img src="figures/umap_combined_Flt1.png?v=1" width="33%" /><img src="figures/umap_combined_Krt14.png?v=1" width="33%" /><img src="figures/umap_combined_Tagln.png?v=1" width="33%" />
