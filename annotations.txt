@@ -16,9 +16,14 @@ leiden,celltype
 18,Fibroblast
 15,Fibroblast
 12,Fibroblast
+16,Fibroblast
+22,Fibroblast
 2,Endothelial
 26,Endothelial
+8,Endothelial
 36,T-Cells
+6,T-Cells
+49,T-Cells
 11,Osteoblast
 9,Osteoblast
 20,Osteoblast
