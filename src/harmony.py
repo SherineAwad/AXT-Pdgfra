@@ -19,30 +19,20 @@ def main():
     print(f"Loaded: {adata.n_obs} cells × {adata.n_vars} genes")
 
     # -------------------------
-    # BATCH KEY
+    # BATCH KEY - USE SAMPLE
     # -------------------------
-    if "batch" in adata.obs.columns:
-        batch_key = "batch"
-    elif "sample" in adata.obs.columns:
-        batch_key = "sample"
-    else:
-        raise ValueError("No batch column found")
+    batch_key = "sample"
 
     print(f"Using batch key: {batch_key}")
 
     # -------------------------
-    # HARMONY FIX
+    # HARMONY
     # -------------------------
     X_pca = adata.obsm["X_pca"]
-
     meta_data = adata.obs[batch_key].values
-
-    # REQUIRED FIX: vars_use (dummy is fine)
     vars_use = np.arange(X_pca.shape[1])
 
     ho = hm.run_harmony(X_pca, meta_data, vars_use)
-
-    # FIX: Correct the transpose - ho.Z_corr already has correct orientation (cells × PCs)
     adata.obsm["X_pca_harmony"] = ho.Z_corr
 
     # -------------------------
@@ -59,12 +49,6 @@ def main():
     sc.pl.umap(
         adata,
         color=batch_key,
-        save=f"_{args.prefix}_harmony_batch.png"
-    )
-
-    sc.pl.umap(
-        adata,
-        color="sample" if "sample" in adata.obs.columns else batch_key,
         save=f"_{args.prefix}_harmony_sample.png"
     )
 

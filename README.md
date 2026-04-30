@@ -50,7 +50,38 @@ Detected 7 doublets (0.1%)
 | Merged       | 41,304 | 17,084 |
 
 
-### Now 
+## Analysing 
+
+1. Normalization
+`sc.pp.normalize_total(target_sum=1e4)`
+- Makes all cells comparable by scaling total counts
+- Each cell gets the same total (10,000 counts)
+
+2. Log Transformation
+`sc.pp.log1p()`
+- Reduces effect of very large values
+- Makes data more balanced and easier to analyze
+
+3. Scaling
+`sc.pp.scale(max_value=10)`
+- Centers genes (mean = 0) and standardizes variance
+- Clips extreme values to avoid outliers dominating
+
+4. PCA (Dimensionality Reduction)
+`sc.tl.pca()`
+- Compresses data into main patterns (principal components)
+- Keeps most important biological variation
+
+5. Neighbors Graph
+`sc.pp.neighbors()`
+- Finds similar cells based on PCA
+- Builds a graph of cell relationships
+
+### 6. UMAP (Visualization)
+`sc.tl.umap()`
+- Projects cells into 2D space
+- Similar cells cluster together visually
+
 
 ![](figures/umap_combined_umap.png?v=1)
 
@@ -58,7 +89,11 @@ Detected 7 doublets (0.1%)
 
 <img src="figures/umap_combined_Uninjured2.png?v=1" width="33%" /><img src="figures/umap_combined_Reg.png?v=1" width="33%" /><img src="figures/umap_combined_NonReg_14DPA.png?v=1" width="33%" />
 
+### Now batch correction using harmony 
 
+![](figures/umap_combined_harmony_sample.png?v=1) 
+
+Biologically distinct samples !!
 
 
 
