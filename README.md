@@ -1,8 +1,24 @@
+# Project Overview
 
+This project combines our **AXT dataset** with publicly available single-cell RNA-seq samples from **GEO dataset GSE135985**.
+
+## Our Dataset
+- AXT dataset: https://github.com/SherineAwad/AXT
+
+## External Dataset (GSE135985)
+
+The following samples were integrated:
+
+- **GSM4038978** — Regen_14 DPA_scRNA-seq  
+- **GSM4038982** — Uninjured_scRNA-seq  
+- **GSM4038983** — Uninjured_2_scRNA-seq  
+- **GSM4038986** — Non_Regen_14 DPA_scRNA-seq  
+
+## Objective
+
+The combined dataset is used to compare regenerative versus non-regenerative conditions across injury states, enabling integrated single-cell analysis and cross-dataset comparison.
 
 ### Light filtering 
-
-violin_GSE135985_AfterQC.png
 
 #### Pre filtering 
 ![](figures/violin_GSE135985_preQC.png?v=1)
@@ -36,12 +52,11 @@ Detected 7 doublets (0.1%)
 
 ### Now 
 
-![](figures/umap_combined_NonReg_14DPA.png?v=1)
-
+![](figures/umap_combined_umap.png?v=1)
 
 <img src="figures/umap_combined_nonReg.png?v=1" width="33%" /><img src="figures/umap_combined_Reg_14DPA.png?v=1" width="33%" /><img src="figures/umap_combined_Uninjured1.png?v=1" width="33%" />
 
-<img src="figures/umap_combined_Uninjured2.png?v=1" width="33%" /><img src="figures/umap_combined_Reg.png?v=1" width="33%" /><img src="figures/umap_combined_umap.png?v=1" width="33%" />
+<img src="figures/umap_combined_Uninjured2.png?v=1" width="33%" /><img src="figures/umap_combined_Reg.png?v=1" width="33%" /><img src="figures/umap_combined_NonReg_14DPA.png?v=1" width="33%" />
 
 
 
