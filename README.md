@@ -41,13 +41,16 @@ Detected 7 doublets (0.1%)
 
 
 ### Now merge this data set with our AXT data set 
-
-| Dataset      | Cells  | Genes  |
+| Dataset   | Cells | Genes |
 |--------------|--------|--------|
 | AXT          | 31,318 | 27,808 |
 | GSE135985    | 9,986  | 18,584 |
-| Shared genes | —      | 17,084 |
-| Merged       | 41,304 | 17,084 |
+| Merged       | 41,304 | 29,308 |
+
+| Description                  | Value  |
+|------------------------------|--------|
+| Expected unique genes        | 29,308 |
+| Actual genes in merge        | 29,308 |
 
 
 ## Analysing 
