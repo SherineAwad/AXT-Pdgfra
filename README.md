@@ -86,11 +86,11 @@ Detected 7 doublets (0.1%)
 - Similar cells cluster together visually
 
 
-![](figures/umap_combined_umap.png?v=1)
+![](figures/umap_combined_umap.png?v=2)
 
-<img src="figures/umap_combined_nonReg.png?v=1" width="33%" /><img src="figures/umap_combined_Reg_14DPA.png?v=1" width="33%" /><img src="figures/umap_combined_Uninjured1.png?v=1" width="33%" />
+<img src="figures/umap_combined_nonReg.png?v=2" width="33%" /><img src="figures/umap_combined_Reg_14DPA.png?v=2" width="33%" /><img src="figures/umap_combined_Uninjured1.png?v=2" width="33%" />
 
-<img src="figures/umap_combined_Uninjured2.png?v=1" width="33%" /><img src="figures/umap_combined_Reg.png?v=1" width="33%" /><img src="figures/umap_combined_NonReg_14DPA.png?v=1" width="33%" />
+<img src="figures/umap_combined_Uninjured2.png?v=2" width="33%" /><img src="figures/umap_combined_Reg.png?v=2" width="33%" /><img src="figures/umap_combined_NonReg_14DPA.png?v=2" width="33%" />
 
 ### Now batch correction using harmony 
 
