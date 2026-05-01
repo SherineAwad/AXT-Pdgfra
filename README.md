@@ -94,16 +94,16 @@ Detected 7 doublets (0.1%)
 
 ### Now batch correction using harmony 
 
-![](figures/umap_combined_harmony_sample.png?v=1) 
+![](figures/umap_combined_harmony_sample.png?v=2) 
 
 Biologically distinct samples !!
 
 
 ### Clustering 
 
-![](figures/umap_combined_leiden.png?v=1)
+![](figures/umap_combined_leiden.png?v=2)
 
-<img src="figures/violin_combined_QC_n_genes_by_counts.png?v=1" width="33%" /><img src="figures/violin_combined_QC_total_counts.png?v=1" width="33%" /><img src="figures/violin_combined_QC_pct_counts_mt.png?v=1" width="33%" />
+<img src="figures/violin_combined_QC_n_genes_by_counts.png?v=2" width="33%" /><img src="figures/violin_combined_QC_total_counts.png?v=2" width="33%" /><img src="figures/violin_combined_QC_pct_counts_mt.png?v=2" width="33%" />
 
 
 ### Visualising marker genes 
