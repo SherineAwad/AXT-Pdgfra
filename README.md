@@ -152,30 +152,32 @@ Detected 7 doublets (0.1%)
 
 ## Explanation: Separation (All Genes) vs Overlap (HVGs)
 
----
 
-## 1. Full-gene PCA → Separation
+### 1. Full-gene PCA → Separation
 
-### What drives the structure:
+#### What drives the structure:
+- **EGFP** (batch-specific transgene)
+  - Present only in one batch, appears in PC1 positive genes
 - Strong **ECM / fibroblast programs**
   - Col1a1, Col1a2, Fn1, Sparc, Dcn, Bgn
 - **Global RNA / housekeeping variation**
   - Fth1, Ftl1, H2afz
 - Broad metabolic / structural shifts
 
-### What this means:
-- PCA is dominated by **global transcriptional state**
-- Signals are distributed across many low-variance genes
-- Strong tissue-level differences emerge
+#### What this means:
+- PCA is dominated by **global transcriptional state + batch-specific markers**
+- EGFP contributes to PC1 alongside ECM and structural genes
+- Signals are distributed across many low-variance genes (including EGFP, which has low within-batch variance but high between-batch difference)
+- Strong tissue-level and batch-specific differences emerge
 
-### Interpretation:
-> Separation between datasets reflects differences in **tissue architecture, composition, and global expression state**, not just cell types.
+#### Interpretation:
+> Separation between datasets reflects differences in **tissue architecture, composition, global expression state, and the presence of batch-specific markers like EGFP**.
 
 ---
 
-## 2. HVG PCA → Overlap
+### 2. HVG PCA → Overlap
 
-### What drives the structure:
+#### What drives the structure:
 - **Immune programs**
   - Cd74, Ptprc, Lyz2, Tyrobp, Il1b
 - **Stromal programs**
@@ -183,33 +185,50 @@ Detected 7 doublets (0.1%)
 - **Epithelial / lineage programs**
   - Krt14, Spp1, Rgs5
 
-### What this means:
+#### What this means:
 - Only high-variance, identity-defining genes are kept
-- Global low-variance structure is removed
-- PCA reflects **cell-type relationships**
+- **EGFP is NOT among the HVGs** — it has low within-batch variance (all cells in batch A express it uniformly; all cells in batch B lack it), so it is excluded by HVG selection
+- Global low-variance structure (ECM tone, housekeeping, EGFP) is removed
+- PCA reflects **cell-type relationships only**
 
-### Interpretation:
-> Overlap appears because datasets share the same **cell identity structure**, once global state variation is removed.
+#### Interpretation:
+> Overlap appears because datasets share the same **cell identity structure**, once global state variation and batch-specific markers like EGFP are removed. EGFP's absence from HVGs explains why the separation disappears.
 
 ---
 
-## 3. Key Insight
+### 3. Key Insight
 
-### Full genes:
-- Capture **global biological + tissue state differences**
+#### Full genes:
+- Capture **global biological state + batch-specific markers (EGFP) + tissue composition**
+- EGFP appears in PC1 positive genes → contributes to separation
 - → leads to strong separation
 
-### HVGs:
+#### HVGs:
+- **EGFP is excluded** (low within-batch variance despite high expression)
 - Capture **cell identity structure only**
 - → leads to overlap
 
 ---
 
-## 4. Final Interpretation
+### 4. Final Interpretation
 
-> The datasets are biologically consistent at the level of cell types, but differ in global transcriptional state and tissue composition.  
-> Full-gene PCA exposes these global differences, while HVG PCA isolates shared cellular identity, producing overlap.
+> The datasets are biologically consistent at the level of cell types, but differ in global transcriptional state, tissue composition, and the presence of a batch-specific marker (EGFP). 
+> 
+> **Evidence for EGFP as a contributor:**
+> - EGFP appears in PC1 positive genes in full-gene PCA
+> - EGFP is **absent from the HVG list** (low within-batch variance)
+> - Separation disappears when EGFP and other low-variance global features are removed (HVG analysis)
+> 
+> HVG analysis deliberately excludes EGFP and other low-variance genes, revealing shared cellular identity that is otherwise masked by batch-specific and global state differences.
 
+
+### EGFP is not in HVG 
+
+![](figures/combined_noHVG_EGFP_hist.png?v=1)
+
+![](figures/combined_noHVG_EGFP_violin.png?v=1) 
+
+![](figures/combined_noHVG_EGFP_umap.png?v=1) 
 
 
 
