@@ -181,7 +181,38 @@ Detected 7 doublets (0.1%)
 > Overlap appears because datasets share the same **cell identity structure**, once global state variation and batch-specific markers like EGFP are removed. EGFP's absence from HVGs explains why the separation disappears.
 ---
 
-### 3. Key Insight
+### Correlation between PCA and EGFP
+
+#### Pearson Correlation (r)
+
+r = cov(EGFP, PC1) / (σ_EGFP × σ_PC1)
+
+**What it calculates:**
+
+For each cell: Is EGFP above its mean WHEN PC1 is above its mean?
+
+- Same direction → positive contribution
+- Opposite direction → negative contribution
+- Sum across all cells → divide by spread of both variables
+
+**Result: -1 to +1**
+
+### Correlation Results
+
+**EGFP-PC1 correlation: 0.64**
+
+Strong positive relationship. EGFP drives PC1. Cells with EGFP sit at one end of PC1. Cells without EGFP sit at the other end.
+
+**EGFP-PC2 correlation: 0.12**
+
+No meaningful relationship. EGFP does not drive PC2. PC2 is driven by other biology.
+
+**Conclusion:**
+
+EGFP is a contributor to batch separation along PC1 in full-gene PCA (r = 0.64). Other genes (ECM, housekeeping) also contribute. Remove EGFP via HVG selection → separation disappears, revealing shared cell identity.
+
+
+### . Key Insight
 
 #### Full genes:
 - Capture **global biological state + batch-specific markers (EGFP) + tissue composition**
@@ -194,7 +225,7 @@ Detected 7 doublets (0.1%)
 - → leads to overlap
 ---
 
-### 4. Final Interpretation
+### . Final Interpretation
 
 > The datasets are biologically consistent at the level of cell types, but differ in global transcriptional state, tissue composition, and the presence of a batch-specific marker (EGFP). 
 > 
@@ -204,6 +235,7 @@ Detected 7 doublets (0.1%)
 > - Separation disappears when EGFP and other low-variance global features are removed (HVG analysis)
 > 
 > HVG analysis deliberately excludes EGFP and other low-variance genes, revealing shared cellular identity that is otherwise masked by batch-specific and global state differences.
+
 
 
 ### EGFP is not in HVG 
