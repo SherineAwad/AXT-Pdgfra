@@ -98,6 +98,9 @@ Detected 7 doublets (0.1%)
 
 ![](figures/umap_harmony_noHVG_harmony_batch.png?v=1) 
 
+
+![](figures/PCA_harmony_noHVG_pc1_pc2_batch.png?v=1)
+
 ### PC1
 - Top drivers (absolute): Cmss1, Tmsb4x, Camk1d, Lars2, Fth1, Ftl1, Rack1, Col1a1, Gphn, Cdk8  
 - Positive genes: Cmss1, Camk1d, Lars2, Rack1, Col1a1, Gphn, Cdk8, Fn1, Col1a2, EGFP  
@@ -123,6 +126,8 @@ Detected 7 doublets (0.1%)
 ## PCA (HVGs ~2000 genes)
 
 ![](figures/umap_harmony_harmony_batch.png?v=1) 
+
+![](figures/PCA_harmony_pc1_pc2_batch.png?v=1) 
 
 ### PC1
 - Top drivers (absolute): Ctss, Cd74, Dcn, Fcer1g, Plek, Lyz2, Cd52, Tyrobp, H2-Ab1, Ptprc  
