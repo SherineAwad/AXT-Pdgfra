@@ -92,11 +92,120 @@ Detected 7 doublets (0.1%)
 
 <img src="figures/umap_combined_Uninjured2.png?v=2" width="33%" /><img src="figures/umap_combined_Reg.png?v=2" width="33%" /><img src="figures/umap_combined_NonReg_14DPA.png?v=2" width="33%" />
 
-### Now batch correction using harmony 
+### Use run_harmony for batch effect 
 
-![](figures/umap_combined_harmony_sample.png?v=2) 
+### Harmony using All Genes ~30k genes
 
-Biologically distinct samples !!
+![](figures/umap_harmony_noHVG_harmony_batch.png?v=1) 
+
+### PC1
+- Top drivers (absolute): Cmss1, Tmsb4x, Camk1d, Lars2, Fth1, Ftl1, Rack1, Col1a1, Gphn, Cdk8  
+- Positive genes: Cmss1, Camk1d, Lars2, Rack1, Col1a1, Gphn, Cdk8, Fn1, Col1a2, EGFP  
+- Negative genes: Tmsb4x, Fth1, Ftl1, H2afz, Gnb2l1, Cst3, Crip1, Shfm1, Igfbp7, Gm8730  
+
+---
+
+### PC2
+- Top drivers (absolute): Sparc, Cmss1, Col3a1, Igfbp7, Srgn, Camk1d, Bgn, Cdk8, Col1a2, Dcn  
+- Positive genes: Sparc, Col3a1, Igfbp7, Bgn, Col1a2, Dcn, Serpinh1, Col1a1, Fstl1, Lum  
+- Negative genes: Cmss1, Srgn, Camk1d, Cdk8, Plek, Cd74, Ctss, Lcp1, Ptprc, Lars2  
+
+---
+
+### PC3
+- Top drivers (absolute): Igfbp7, Dcn, Serping1, Fabp5, Ebf1, Sparc, Plpp3, Igfbp5, Zbtb20, Gsn  
+- Positive genes: Igfbp7, Dcn, Serping1, Ebf1, Sparc, Plpp3, Igfbp5, Zbtb20, Gsn, Bgn  
+- Negative genes: Fabp5, Pfn1, H2az1, Ctss, Mif, Rbm3, Ppia, Actg1, Cd74, Slc25a5  
+
+
+---
+
+## PCA (HVGs ~2000 genes)
+
+![](figures/umap_harmony_harmony_batch.png?v=1) 
+
+### PC1
+- Top drivers (absolute): Ctss, Cd74, Dcn, Fcer1g, Plek, Lyz2, Cd52, Tyrobp, H2-Ab1, Ptprc  
+- Positive genes: Ctss, Cd74, Fcer1g, Plek, Lyz2, Cd52, Tyrobp, H2-Ab1, Ptprc, Il1b  
+- Negative genes: Dcn, Igfbp5, Serpine2, Apod, Aspn, Crispld2, Sparcl1, Cxcl12, Rgs5, Aqp1  
+
+---
+
+### PC2
+- Top drivers (absolute): Dcn, Cst3, Apod, Igfbp5, Ccl2, Apoe, Ccl7, Ctsk, Cxcl12, Aspn  
+- Positive genes: Dcn, Cst3, Apod, Igfbp5, Ccl2, Apoe, Ccl7, Ctsk, Cxcl12, Aspn  
+- Negative genes: Kcnq5, Taco1, Ibsp, Epha3, Phlpp1, Spp1, Lgals7, Fabp5, Sox6, Ly6d  
+
+---
+
+### PC3
+- Top drivers (absolute): Lgals7, Rgs5, Apoe, Spp1, Sparcl1, Tnc, Krtdap, Krt14, Kcnq5, Ibsp  
+- Positive genes: Lgals7, Rgs5, Apoe, Sparcl1, Krtdap, Krt14, Cst3, Ly6d, Perp, Gm42418  
+- Negative genes: Spp1, Tnc, Kcnq5, Ibsp, Taco1, Glis3, Epha3, Phlpp1, Col11a1, Gm20186  
+
+
+
+## Explanation: Separation (All Genes) vs Overlap (HVGs)
+
+---
+
+## 1. Full-gene PCA → Separation
+
+### What drives the structure:
+- Strong **ECM / fibroblast programs**
+  - Col1a1, Col1a2, Fn1, Sparc, Dcn, Bgn
+- **Global RNA / housekeeping variation**
+  - Fth1, Ftl1, H2afz
+- Broad metabolic / structural shifts
+
+### What this means:
+- PCA is dominated by **global transcriptional state**
+- Signals are distributed across many low-variance genes
+- Strong tissue-level differences emerge
+
+### Interpretation:
+> Separation between datasets reflects differences in **tissue architecture, composition, and global expression state**, not just cell types.
+
+---
+
+## 2. HVG PCA → Overlap
+
+### What drives the structure:
+- **Immune programs**
+  - Cd74, Ptprc, Lyz2, Tyrobp, Il1b
+- **Stromal programs**
+  - Dcn, Igfbp5, Cxcl12, Apoe
+- **Epithelial / lineage programs**
+  - Krt14, Spp1, Rgs5
+
+### What this means:
+- Only high-variance, identity-defining genes are kept
+- Global low-variance structure is removed
+- PCA reflects **cell-type relationships**
+
+### Interpretation:
+> Overlap appears because datasets share the same **cell identity structure**, once global state variation is removed.
+
+---
+
+## 3. Key Insight
+
+### Full genes:
+- Capture **global biological + tissue state differences**
+- → leads to strong separation
+
+### HVGs:
+- Capture **cell identity structure only**
+- → leads to overlap
+
+---
+
+## 4. Final Interpretation
+
+> The datasets are biologically consistent at the level of cell types, but differ in global transcriptional state and tissue composition.  
+> Full-gene PCA exposes these global differences, while HVG PCA isolates shared cellular identity, producing overlap.
+
+
 
 
 ### Clustering 
