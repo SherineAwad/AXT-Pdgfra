@@ -94,7 +94,7 @@ Detected 7 doublets (0.1%)
 
 ## Use run_harmony for batch effect 
 
-## 🟢🟢 🟢 🟢 Harmony using All Genes ~30k genes
+##  🟢 🟢 🟢 Harmony using All Genes ~30k genes
 
 ![](figures/umap_harmony_noHVG_harmony_batch.png?v=1) 
 
