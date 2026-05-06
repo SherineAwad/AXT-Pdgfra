@@ -231,7 +231,7 @@ To assess how much EGFP contributes to the separation between batches, we perfor
 ![](figures/combined_noHVG_egfp_pc_r2.png?v=1) 
 
 
-### . Key Insight
+### Key Insight
 
 #### Full genes:
 - Capture **global biological state + batch-specific markers (EGFP) + tissue composition**
@@ -244,7 +244,7 @@ To assess how much EGFP contributes to the separation between batches, we perfor
 - → leads to overlap
 ---
 
-### . Final Interpretation
+### Final Interpretation
 
 > The datasets are biologically consistent at the level of cell types, but differ in global transcriptional state, tissue composition, and the presence of a batch-specific marker (EGFP). 
 > 
@@ -257,7 +257,7 @@ To assess how much EGFP contributes to the separation between batches, we perfor
 
 
 
-### EGFP is not in HVG 
+### Why EGFP is not in HVG 
 
 ![](figures/combined_noHVG_EGFP_hist.png?v=1)
 
