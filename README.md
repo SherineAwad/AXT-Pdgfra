@@ -92,9 +92,9 @@ Detected 7 doublets (0.1%)
 
 <img src="figures/umap_combined_Uninjured2.png?v=3" width="33%" /><img src="figures/umap_combined_Reg.png?v=3" width="33%" /><img src="figures/umap_combined_NonReg_14DPA.png?v=3" width="33%" />
 
-### Use run_harmony for batch effect 
+## Use run_harmony for batch effect 
 
-### Harmony using All Genes ~30k genes
+## 🟢 🟢 🟢H H Harmony using All Genes ~30k genes
 
 ![](figures/umap_harmony_noHVG_harmony_batch.png?v=1) 
 
@@ -117,7 +117,7 @@ Detected 7 doublets (0.1%)
 
 ---
 
-## Harmony using HVGs ~2000 genes
+## 🟢 🟢 🟢 Harmony using HVGs ~2000 genes
 
 ![](figures/umap_harmony_harmony_batch.png?v=1) 
 
@@ -181,9 +181,9 @@ Detected 7 doublets (0.1%)
 > Overlap appears because datasets share the same **cell identity structure**, once global state variation and batch-specific markers like EGFP are removed. EGFP's absence from HVGs explains why the separation disappears.
 ---
 
-### Correlation between PCA and EGFP
+### 📈 Correlation between PCA and EGFP
 
-#### Pearson Correlation (r)
+##### Pearson Correlation (r)
 
 r = cov(EGFP, PC1) / (σ_EGFP × σ_PC1)
 
@@ -197,7 +197,7 @@ For each cell: Is EGFP above its mean WHEN PC1 is above its mean?
 
 **Result: -1 to +1**
 
-### Correlation Results
+##### Correlation Results
 
 **EGFP-PC1 correlation: 0.64**
 
@@ -212,7 +212,7 @@ No meaningful relationship. EGFP does not drive PC2. PC2 is driven by other biol
 EGFP is a contributor to batch separation along PC1 in full-gene PCA (r = 0.64). Other genes (ECM, etc) also contribute. Remove EGFP via HVG selection → separation disappears, revealing shared cell identity.
 
 
-### Quantifying EGFP contribution to PCA separation
+### 📈 Quantifying EGFP contribution to PCA separation
 
 To assess how much EGFP contributes to the separation between batches, we performed a linear regression of **PC1 and PC2 scores** on EGFP expression. The results are:
 
@@ -231,7 +231,7 @@ To assess how much EGFP contributes to the separation between batches, we perfor
 ![](figures/combined_noHVG_egfp_pc_r2.png?v=1) 
 
 
-### Key Insight
+### 🧬🧬 Key Insight
 
 #### Full genes:
 - Capture **global biological state + batch-specific markers (EGFP) + tissue composition**
