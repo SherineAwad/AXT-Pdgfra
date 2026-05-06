@@ -117,7 +117,7 @@ Detected 7 doublets (0.1%)
 
 ---
 
-## PCA (HVGs ~2000 genes)
+## Harmony using HVGs ~2000 genes
 
 ![](figures/umap_harmony_harmony_batch.png?v=1) 
 
@@ -209,7 +209,7 @@ No meaningful relationship. EGFP does not drive PC2. PC2 is driven by other biol
 
 **Conclusion:**
 
-EGFP is a contributor to batch separation along PC1 in full-gene PCA (r = 0.64). Other genes (ECM, housekeeping) also contribute. Remove EGFP via HVG selection → separation disappears, revealing shared cell identity.
+EGFP is a contributor to batch separation along PC1 in full-gene PCA (r = 0.64). Other genes (ECM, etc) also contribute. Remove EGFP via HVG selection → separation disappears, revealing shared cell identity.
 
 
 ### . Key Insight
