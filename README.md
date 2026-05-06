@@ -272,9 +272,9 @@ To assess how much EGFP contributes to the separation between batches, we perfor
 
 ### Clustering 
 
-![](figures/umap_combined_leiden.png?v=2)
+![](figures/umap_combined_leiden.png?v=3)
 
-<img src="figures/violin_combined_QC_n_genes_by_counts.png?v=2" width="33%" /><img src="figures/violin_combined_QC_total_counts.png?v=2" width="33%" /><img src="figures/violin_combined_QC_pct_counts_mt.png?v=2" width="33%" />
+<img src="figures/violin_combined_QC_n_genes_by_counts.png?v=3" width="33%" /><img src="figures/violin_combined_QC_total_counts.png?v=3" width="33%" /><img src="figures/violin_combined_QC_pct_counts_mt.png?v=3" width="33%" />
 
 
 ### Visualising marker genes 
