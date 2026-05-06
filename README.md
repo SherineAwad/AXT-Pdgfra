@@ -212,6 +212,25 @@ No meaningful relationship. EGFP does not drive PC2. PC2 is driven by other biol
 EGFP is a contributor to batch separation along PC1 in full-gene PCA (r = 0.64). Other genes (ECM, etc) also contribute. Remove EGFP via HVG selection → separation disappears, revealing shared cell identity.
 
 
+### Quantifying EGFP contribution to PCA separation
+
+To assess how much EGFP contributes to the separation between batches, we performed a linear regression of **PC1 and PC2 scores** on EGFP expression. The results are:
+
+| Principal Component | R² (variance explained by EGFP) |
+|-------------------|--------------------------------|
+| PC1               | 0.404                          |
+| PC2               | 0.014                          |
+
+**Interpretation:**
+
+- **PC1:** EGFP explains ~40% of the variance along PC1. This indicates that EGFP is a **significant contributor** to the separation observed in PC1, but other genes also contribute.  
+- **PC2:** EGFP explains only ~1.4% of the variance along PC2. This shows that EGFP has **minimal influence** on PC2, which is likely driven by other transcriptional programs or cell-type-specific variation.
+
+**Conclusion:** EGFP is **one of several contributors** to batch separation in the PCA of all genes, consistent with the observation that highly variable genes (HVG) PCA — which excludes EGFP — shows overlapping batches.
+
+![](figures/combined_noHVG_egfp_pc_r2.png?v=1) 
+
+
 ### . Key Insight
 
 #### Full genes:
