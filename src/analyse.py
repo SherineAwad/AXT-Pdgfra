@@ -7,6 +7,8 @@ def main():
     parser.add_argument('--input', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--prefix', required=True)
+    parser.add_argument('--HVG', type=int, default=2000, 
+                        help="Number of highly variable genes (0 = disable HVG filtering)")
     args = parser.parse_args()
 
     # -------------------------
@@ -20,12 +22,20 @@ def main():
     adata.layers["counts"] = adata.X.copy()
 
     # -------------------------
-    # DOUBLETS ALREADY REMOVED (NO ACTION)
+    # BASIC CLEANUP
     # -------------------------
-    # intentionally skipped
-
     adata.var_names_make_unique()
     adata.obs_names_make_unique()
+
+    # -------------------------
+    # REMOVE RIBOSOMAL GENES
+    # -------------------------
+    ribo_genes = [
+    g for g in adata.var_names
+    if g.lower().startswith(('rpl', 'rps', 'mrpl', 'mrps'))]
+
+    print(f"Removing {len(ribo_genes)} ribosomal genes")
+    adata = adata[:, ~adata.var_names.isin(ribo_genes)]
 
     # -------------------------
     # NORMALISATION
@@ -35,15 +45,22 @@ def main():
     adata.layers["log1p"] = adata.X.copy()
 
     # -------------------------
-    # CLEAN MATRIX
+    # HVG (OPTIONAL)
     # -------------------------
-    adata.X = adata.X.copy()
+    if args.HVG > 0:
+        print(f"Selecting top {args.HVG} HVGs")
+        sc.pp.highly_variable_genes(
+            adata,
+            n_top_genes=args.HVG,
+            flavor="seurat"
+        )
+        adata = adata[:, adata.var.highly_variable].copy()
+    else:
+        print("Skipping HVG selection (using all genes)")
 
     # -------------------------
-    # SCALE + PCA
+    # PCA
     # -------------------------
-    sc.pp.scale(adata, max_value=10)
-
     sc.tl.pca(
         adata,
         n_comps=30,
@@ -53,7 +70,7 @@ def main():
     print("PCA shape:", adata.obsm["X_pca"].shape)
 
     # -------------------------
-    # UMAP
+    # NEIGHBORS + UMAP
     # -------------------------
     sc.pp.neighbors(adata, use_rep="X_pca")
     sc.tl.umap(adata)

@@ -12,9 +12,9 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Required args
-    parser.add_argument('--input', required=True, help="Input .h5ad file")
-    parser.add_argument('--output', required=True, help="Output .h5ad file")
-    parser.add_argument('--prefix', required=True, help="Prefix for saved figures")
+    parser.add_argument('--input', required=True)
+    parser.add_argument('--output', required=True)
+    parser.add_argument('--prefix', required=True)
 
     # QC parameters
     parser.add_argument('--min_genes', type=int, default=800)
@@ -29,65 +29,79 @@ def main():
     args = parser.parse_args()
 
     # ----------------------------
-    # LOAD H5AD (ONLY CHANGE)
+    # LOAD H5AD
     # ----------------------------
     print(f"Reading {args.input}...")
-    combined_adata = sc.read_h5ad(args.input)
-
-    combined_adata.var_names_make_unique()
+    adata = sc.read_h5ad(args.input)
+    adata.var_names_make_unique()
 
     # ----------------------------
-    # QC METRICS
+    # QC METRICS (MT + RIBO)
     # ----------------------------
-    combined_adata.var["mt"] = combined_adata.var_names.str.startswith("mt-")
+
+    # Mitochondrial genes
+    adata.var["mt"] = adata.var_names.str.startswith("mt-")
+
+    # Ribosomal genes
+    adata.var["ribo"] = adata.var_names.str.lower().str.startswith(("rpl", "rps", "mrpl", "mrps"))
 
     sc.pp.calculate_qc_metrics(
-        combined_adata, qc_vars=["mt"], inplace=True, log1p=True
+        adata,
+        qc_vars=["mt", "ribo"],
+        inplace=True,
+        log1p=True
     )
 
-    # BEFORE QC plot
+    # ----------------------------
+    # BEFORE QC PLOTS
+    # ----------------------------
     sc.pl.violin(
-        combined_adata,
-        ["n_genes_by_counts", "total_counts", "pct_counts_mt"],
+        adata,
+        ["n_genes_by_counts", "total_counts", "pct_counts_mt", "pct_counts_ribo"],
         jitter=0.4,
         multi_panel=True,
         save=f"_{args.prefix}_preQC.png"
     )
 
     # -----------------------------
-    # CELL FILTERING (UNCHANGED)
+    # FILTER CELLS
     # -----------------------------
-    combined_adata = combined_adata[
-        (combined_adata.obs['n_genes_by_counts'] > args.min_genes) &
-        (combined_adata.obs['n_genes_by_counts'] < args.max_genes) &
-        (combined_adata.obs['total_counts'] > args.min_counts) &
-        (combined_adata.obs['total_counts'] < args.max_counts) &
-        (combined_adata.obs['pct_counts_mt'] < args.max_mt), :
+    adata = adata[
+        (adata.obs['n_genes_by_counts'] > args.min_genes) &
+        (adata.obs['n_genes_by_counts'] < args.max_genes) &
+        (adata.obs['total_counts'] > args.min_counts) &
+        (adata.obs['total_counts'] < args.max_counts) &
+        (adata.obs['pct_counts_mt'] < args.max_mt), :
     ]
 
-    sc.pp.filter_cells(combined_adata, min_genes=args.min_genes_cell)
-    sc.pp.filter_genes(combined_adata, min_cells=args.min_cells_gene)
+    sc.pp.filter_cells(adata, min_genes=args.min_genes_cell)
+    sc.pp.filter_genes(adata, min_cells=args.min_cells_gene)
 
     # -----------------------------
-    # REMOVE ZERO-EXPRESSION GENES
+    # REMOVE ZERO EXPRESSION GENES
     # -----------------------------
-    if sp.issparse(combined_adata.X):
-        gene_sums = np.array(combined_adata.X.sum(axis=0)).flatten()
+    if sp.issparse(adata.X):
+        gene_sums = np.array(adata.X.sum(axis=0)).flatten()
     else:
-        gene_sums = combined_adata.X.sum(axis=0)
+        gene_sums = adata.X.sum(axis=0)
 
-    combined_adata = combined_adata[:, gene_sums > 0].copy()
+    adata = adata[:, gene_sums > 0].copy()
 
-    # AFTER QC plot
+    # ----------------------------
+    # AFTER QC PLOTS
+    # ----------------------------
     sc.pl.violin(
-        combined_adata,
-        ["n_genes_by_counts", "total_counts", "pct_counts_mt"],
+        adata,
+        ["n_genes_by_counts", "total_counts", "pct_counts_mt", "pct_counts_ribo"],
         jitter=0.4,
         multi_panel=True,
         save=f"_{args.prefix}_AfterQC.png"
     )
 
-    combined_adata.write(args.output)
+    # ----------------------------
+    # SAVE
+    # ----------------------------
+    adata.write(args.output)
 
 
 if __name__ == "__main__":
