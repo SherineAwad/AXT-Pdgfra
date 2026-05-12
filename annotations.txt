@@ -1,13 +1,9 @@
 leiden,celltype
-45,Fibroblast
 19,Fibroblast
 28,Fibroblast
 35,Fibroblast
 14,Fibroblast
-47,Fibroblast
 39,Fibfroblast
-25,Fibroblast
-8,Fibroblast
 2,Fibroblast
 33,Fibroblast
 16,Fibroblast
@@ -37,7 +33,6 @@ leiden,celltype
 11,SMC
 38,T-cells
 51,Osteoclast
-32,Synoviocyte
 46,Synoviocyte
 24,Neutrophil
 41,Lymphatic_Endothelial
@@ -49,8 +44,13 @@ leiden,celltype
 13,Macrophage
 18,Macrophage
 7,Macrophage
-52,Macrophage
 30,Macrophage
 44,Macrophage
 49,Mast cells
 43,Sweat_glands
+25,SMC
+8,SMC
+47,Schwan
+45,Schwan
+32,Fibroblast
+52,Osteoblast
