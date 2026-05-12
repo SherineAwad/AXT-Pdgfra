@@ -416,3 +416,15 @@ From the dotplot, cluster 5 doesn't seem to be higlhy expressed in 2 distinct pr
 ![](figures/umap_combined_celltypeON.png?v=8) 
 
 ![](figures/umap_combined_celltype.png?v=8)
+
+### Now lets subset Fibroblast from GSE135985 and Osteosarcoma from AXT 
+
+## Celltype Composition by Sample
+
+| celltype      | NonReg_14DPA | Reg  | Reg_14DPA | Uninjured1 | Uninjured2 | nonReg |
+|----------------|--------------|------|------------|-------------|-------------|---------|
+| Fibroblast     | 634          | 0    | 433        | 1564        | 2521        | 0       |
+| Osteosarcoma   | 0            | 1116 | 0          | 0           | 0           | 9075    |
+
+
+
