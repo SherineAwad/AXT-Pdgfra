@@ -9,6 +9,9 @@ args = parser.parse_args()
 
 adata = sc.read(args.input)
 
+if "connectivities" not in adata.obsp:
+    raise ValueError("Neighbor graph missing. Run Harmony/neighbors first.")
+
 # Leiden clustering
 sc.tl.leiden(adata, resolution=2.5)
 
