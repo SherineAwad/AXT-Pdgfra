@@ -346,11 +346,9 @@ marker_genes = {
 
 <img src="figures/umap_combined_Acp5.png?v=4" width="33%" /><img src="figures/umap_combined_Cdh1.png?v=4" width="33%" /><img src="figures/umap_combined_Mrc1.png?v=4" width="33%" />
 
-<img src="figures/umap_combined_Frzb.png?v=4" width="33%" /><img src="figures/umap_combined_Kit.png?v=4" width="33%" /><img src="figures/umap_combined_celltype.png?v=4" width="33%" />
+<img src="figures/umap_combined_Frzb.png?v=4" width="33%" /><img src="figures/umap_combined_Kit.png?v=4" width="33%" /> <img src="figures/umap_combined_Adgre1.png?v=4" width="33%" />
 
-<img src="figures/umap_combined_Adgre1.png?v=4" width="33%" /><img src="figures/umap_combined_Comp.png?v=4" width="33%" /><img src="figures/umap_combined_Acan.png?v=4" width="33%" />
-
-<img src="figures/umap_combined_Krt17.png?v=4" width="33%" /><img src="figures/umap_combined_Cd79a.png?v=4" width="33%" /><img src="figures/umap_combined_Bglap.png?v=4" width="33%" />
+<img src="figures/umap_combined_Comp.png?v=4" width="33%" /><img src="figures/umap_combined_Acan.png?v=4" width="33%" /> <img src="figures/umap_combined_Krt17.png?v=4" width="33%" /><img src="figures/umap_combined_Cd79a.png?v=4" width="33%" />
 
 <img src="figures/umap_combined_Hpgds.png?v=4" width="33%" /><img src="figures/umap_combined_Kcnj8.png?v=4" width="33%" /><img src="figures/umap_combined_Dmp1.png?v=4" width="33%" />
 
@@ -389,6 +387,9 @@ marker_genes = {
 <img src="figures/umap_combined_Ly6g.png?v=4" width="33%" /><img src="figures/umap_combined_Tpsab1.png?v=4" width="33%" /><img src="figures/umap_combined_Gdf5.png?v=4" width="33%" />
 
 <img src="figures/umap_combined_Cd200r3.png?v=4" width="33%" /><img src="figures/umap_combined_Mcpt8.png?v=4" width="33%" /><img src="figures/umap_combined_Cpa3.png?v=4" width="33%" />
+
+<img src="figures/umap_combined_Bglap.png?v=4" width="33%" />
+
 
 ### Preliminary Annotations 
 
