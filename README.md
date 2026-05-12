@@ -318,7 +318,7 @@ marker_genes = {
 
 <img src="figures/umap_combined_Acta2.png?v=4" width="33%" /><img src="figures/umap_combined_Pdgfrb.png?v=4" width="33%" /><img src="figures/umap_combined_Ibsp.png?v=4" width="33%" />
 
-<img src="figures/umap_combined_Pmp22.png?v=4" width="33%" /><img src="figures/umap_combined_Cspg4.png?v=4" width="33%" /><img src="figures/umap_combined_leiden.png?v=4" width="33%" />
+<img src="figures/umap_combined_Pmp22.png?v=4" width="33%" /><img src="figures/umap_combined_Cspg4.png?v=4" width="33%" /><img src="figures/umap_combined_Cd79a.png?v=4" width="33%" />
 
 <img src="figures/umap_combined_Ctsk.png?v=4" width="33%" /><img src="figures/umap_combined_Rgs5.png?v=4" width="33%" /><img src="figures/umap_combined_Pdgfra.png?v=4" width="33%" />
 
@@ -348,7 +348,7 @@ marker_genes = {
 
 <img src="figures/umap_combined_Frzb.png?v=4" width="33%" /><img src="figures/umap_combined_Kit.png?v=4" width="33%" /> <img src="figures/umap_combined_Adgre1.png?v=4" width="33%" />
 
-<img src="figures/umap_combined_Comp.png?v=4" width="33%" /><img src="figures/umap_combined_Acan.png?v=4" width="33%" /> <img src="figures/umap_combined_Krt17.png?v=4" width="33%" /><img src="figures/umap_combined_Cd79a.png?v=4" width="33%" />
+<img src="figures/umap_combined_Comp.png?v=4" width="33%" /><img src="figures/umap_combined_Acan.png?v=4" width="33%" /> <img src="figures/umap_combined_Krt17.png?v=4" width="33%" />
 
 <img src="figures/umap_combined_Hpgds.png?v=4" width="33%" /><img src="figures/umap_combined_Kcnj8.png?v=4" width="33%" /><img src="figures/umap_combined_Dmp1.png?v=4" width="33%" />
 
