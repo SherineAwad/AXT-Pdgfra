@@ -390,6 +390,26 @@ marker_genes = {
 
 <img src="figures/umap_combined_Bglap.png?v=4" width="33%" />
 
+### Double checking cluster 5 
+
+From the dotplot and feature plots,  cluster 5 does not show strong evidence of two distinct co-expressed gene programs.
+
+![](figures/umap_doublet_score.png?v=1) 
+
+From the dotplot, cluster 5 doesn't seem to be higlhy expressed in 2 distinct programs 
+## doublet_score Summary Statistics
+
+| Statistic | Value |
+|----------|-------|
+| Count    | 41304 |
+| Mean     | 0.041292 |
+| Std      | 0.045593 |
+| Min      | 0.000852 |
+| 25%      | 0.018277 |
+| 50%      | 0.030149 |
+| 75%      | 0.047481 |
+| Max      | 0.484083 |
+
 
 ### Preliminary Annotations 
 

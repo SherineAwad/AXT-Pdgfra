@@ -16,7 +16,6 @@ leiden,celltype
 29,Fibroblast
 34,Osteosarcoma
 0,Osteosarcoma
-14,Osteosarcoma
 48,Osteosarcoma
 21,Osteosarcoma
 50,Osteosarcoma
@@ -33,7 +32,7 @@ leiden,celltype
 37,Endothelial
 15,Keratinocyte
 12,Keratinocyte
-5,Osteoblast
+5,T-cells
 39,Pericyte
 11,SMC
 38,T-cells
@@ -52,5 +51,6 @@ leiden,celltype
 7,Macrophage
 52,Macrophage
 30,Macrophage
+44,Macrophage
 49,Mast cells
 43,Sweat_glands
