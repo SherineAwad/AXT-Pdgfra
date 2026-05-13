@@ -433,3 +433,96 @@ From the dotplot, cluster 5 doesn't seem to be higlhy expressed in 2 distinct pr
 ![](figures/Fibroblast_Osteosarcoma_perSample_umap.png?v=1)
 
 
+
+
+## Celltype similarity 
+
+### Method 1: Cosine similarity 
+
+# Cosine Similarity in This Pipeline (Simple Explanation)
+
+##### 1. What is a “vector” in this analysis?
+
+Each biological state is defined as:
+
+(celltype × sample)
+
+Example:
+- Osteosarcoma_Reg
+- Fibroblast_Injured1
+
+Each state is converted into a gene expression vector.
+
+If we have 10 genes:
+
+A = [
+  mean expression of gene1 in Osteosarcoma_Reg,
+  mean expression of gene2 in Osteosarcoma_Reg,
+  mean expression of gene3 in Osteosarcoma_Reg,
+  ...
+  mean expression of gene10 in Osteosarcoma_Reg
+]
+
+This is called a pseudobulk expression profile.
+
+So:
+- Vector A = one state (e.g. Osteosarcoma_Reg)
+- Vector B = another state (e.g. Fibroblast_Injured1)
+
+---
+
+##### 2. What cosine similarity compares
+
+Cosine similarity compares:
+
+the pattern of gene expression between two states
+
+It does NOT depend on:
+- number of cells
+- absolute expression scale
+- sequencing depth
+
+It only cares about:
+whether genes go up and down together in both states
+
+---
+
+##### 3. Mathematical definition
+
+Given two vectors A and B:
+
+cos(A, B) = (A · B) / (||A|| × ||B||)
+
+Where:
+
+Dot product:
+A · B = Σ (Ai × Bi)
+
+Norm (length):
+||A|| = sqrt(Σ Ai²)
+||B|| = sqrt(Σ Bi²)
+
+---
+
+##### 4. What this means intuitively
+
+Cosine similarity asks:
+
+“Do these two gene expression profiles point in the same direction?”
+
+- Value = 1 → identical pattern
+- Value = 0 → unrelated patterns
+- Value = -1 → opposite patterns (rare in expression data)
+
+---
+
+##### 5. Biological interpretation
+
+Each vector is a cell state signature.
+
+Cosine similarity tells us:
+
+how similar two biological states are in their transcriptional programs; the alignment of gene expression programs between biological states, ignoring scale and focusing only on expression pattern shape
+
+![](figures/figures/Osteosarcoma_Reg_cosine_similarity.png?v=1)
+
