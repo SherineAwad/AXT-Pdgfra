@@ -552,3 +552,111 @@ how similar two biological states are in their transcriptional programs; the ali
 
 ![](figures/Fibroblast_Osteosarcoma_cosine_similarity.png?v=1)
 
+
+### Method 4: PCA + Wasserstein Distance 
+
+#####  What is being compared?
+
+Each data point is a **state**:
+
+(celltype × sample)
+
+Example states:
+- Osteosarcoma_Reg
+- Osteosarcoma_nonReg
+- Fibroblast_14DPA
+- Fibroblast_Uninjured1
+
+Each state contains many single cells.
+
+So instead of comparing single vectors, we compare:
+> **distributions of cells**
+
+---
+
+##### Step 1: Represent cells in a shared space (PCA)
+
+All cells from all states are combined and projected into PCA space.
+
+Each cell becomes:
+
+(x₁, x₂, x₃, ..., xₙ)
+
+Where:
+- each axis = principal component
+- PCA captures main sources of variation in gene expression
+
+So now:
+> each state = a cloud of points in PCA space
+
+---
+
+##### Step 2: Each state becomes a distribution
+
+For each state:
+
+- collect all its cells
+- represent them in PCA space
+
+So instead of a single vector, you now have:
+
+> a **distribution of points per state**
+
+Example:
+- Osteosarcoma_Reg → cloud A
+- Fibroblast_Injured1 → cloud B
+
+---
+
+##### Step 3: Compare distributions (Wasserstein distance)
+
+Wasserstein distance measures:
+
+> how much “work” is needed to move one distribution into another
+
+Intuition:
+- if two clouds overlap → low distance
+- if they are far apart → high distance
+
+It compares:
+> shape + spread + location of cell populations
+
+---
+
+##### Step 4: Per-PC comparison
+
+Instead of comparing full high-dimensional distributions at once, your implementation:
+
+- compares each PCA dimension separately
+- computes Wasserstein distance per PC
+- averages across PCs
+
+
+---
+
+##### Step 5: Convert distance → similarity
+
+Since Wasserstein is a **distance (bigger = more different)**:
+
+similarity = 1 - normalized_distance
+
+So:
+- 1 → identical distributions
+- 0 → completely different distributions
+
+![](figures/Fibroblast_Osteosarcoma_pca_wasserstein_similarity.png?v=1)
+
+# Cosine / Pearson / Spearman vs PCA + Wasserstein
+
+| Aspect | Cosine / Pearson / Spearman | PCA + Wasserstein |
+|--------|-----------------------------|--------------------|
+| What it reflects | Similarity of **average gene-expression program** | Similarity of **entire cell population structure** |
+| Basic unit of comparison | One vector per (celltype × sample) | Distribution of cells per (celltype × sample) |
+| Data representation | Mean expression across cells | Single-cell embeddings in PCA space |
+| What it tells you | Whether genes are similarly up/down on average | Whether cell states and subpopulations are similarly distributed |
+| Captures heterogeneity? | ❌ No (collapses to mean) | ✅ Yes (keeps full distribution) |
+| Sensitive to rare cell states | ❌ Weak / lost | ✅ Strong |
+| Main biological signal | Transcriptional program similarity | Cellular composition + state shifts |
+| Core intuition | “Do these groups express genes similarly?” | “Do these groups contain similar kinds of cells?” |
+
+
