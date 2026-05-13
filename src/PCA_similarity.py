@@ -8,6 +8,7 @@ from scipy.sparse import issparse
 from scipy.stats import wasserstein_distance
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics.pairwise import pairwise_kernels
 import os
 import warnings
 
@@ -23,6 +24,18 @@ def get_X(adata):
 
 
 # ----------------------------
+# MMD (simple kernel version)
+# ----------------------------
+def compute_mmd(X, Y):
+    # RBF kernel (default gamma auto)
+    Kxx = pairwise_kernels(X, X, metric="rbf")
+    Kyy = pairwise_kernels(Y, Y, metric="rbf")
+    Kxy = pairwise_kernels(X, Y, metric="rbf")
+
+    return Kxx.mean() + Kyy.mean() - 2 * Kxy.mean()
+
+
+# ----------------------------
 # MAIN
 # ----------------------------
 def main():
@@ -30,6 +43,7 @@ def main():
 
     parser.add_argument("--input", required=True)
     parser.add_argument("--prefix", required=True)
+    parser.add_argument("--method", choices=["wasserstein", "mmd"], default="wasserstein")
     parser.add_argument("--n_pcs", type=int, default=50)
     parser.add_argument("--max_cells", type=int, default=10000)
 
@@ -42,7 +56,7 @@ def main():
     assert "sample" in adata.obs
 
     # ----------------------------
-    # BUILD STATES (celltype × sample)
+    # BUILD STATES
     # ----------------------------
     adata.obs["state"] = (
         adata.obs["celltype"].astype(str)
@@ -56,17 +70,13 @@ def main():
     rng = np.random.default_rng(42)
 
     # ----------------------------
-    # COLLECT CELLS PER STATE
+    # COLLECT DATA
     # ----------------------------
     state_data = {}
-
     all_X = []
 
     for st in states:
         sub = adata[adata.obs["state"] == st]
-
-        if sub.n_obs == 0:
-            continue
 
         if sub.n_obs > args.max_cells:
             idx = rng.choice(sub.n_obs, args.max_cells, replace=False)
@@ -78,44 +88,30 @@ def main():
 
     X_all = np.vstack(all_X)
 
-    print(f"Total cells used: {X_all.shape}")
-
-    # ----------------------------
-    # PCA FIT
-    # ----------------------------
     print("Fitting PCA...")
-
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X_all)
 
     pca = PCA(n_components=min(args.n_pcs, X_scaled.shape[1], X_scaled.shape[0]))
     pca.fit(X_scaled)
 
-    print(f"PCA components: {pca.n_components_}")
-
     # ----------------------------
     # PROJECT STATES
     # ----------------------------
     proj = {}
 
-    start = 0
-
     for st in states:
         X = state_data[st]
-        n = X.shape[0]
-
-        X_scaled = scaler.transform(X)
-        proj[st] = pca.transform(X_scaled)
-
-        start += n
+        Xs = scaler.transform(X)
+        proj[st] = pca.transform(Xs)
 
     # ----------------------------
-    # WASSERSTEIN DISTANCE MATRIX
+    # DISTANCE MATRIX
     # ----------------------------
-    n_st = len(states)
-    dist = np.zeros((n_st, n_st))
+    n = len(states)
+    dist = np.zeros((n, n))
 
-    print("Computing Wasserstein distances...")
+    print(f"Computing {args.method} distances...")
 
     for i, s1 in enumerate(states):
         for j, s2 in enumerate(states):
@@ -123,16 +119,18 @@ def main():
             A = proj[s1]
             B = proj[s2]
 
-            n_pcs = min(A.shape[1], B.shape[1])
+            if args.method == "wasserstein":
+                n_pcs = min(A.shape[1], B.shape[1])
+                dists = [
+                    wasserstein_distance(A[:, k], B[:, k])
+                    for k in range(n_pcs)
+                ]
+                dist[i, j] = np.mean(dists)
 
-            dists = [
-                wasserstein_distance(A[:, k], B[:, k])
-                for k in range(n_pcs)
-            ]
+            elif args.method == "mmd":
+                dist[i, j] = compute_mmd(A, B)
 
-            dist[i, j] = np.mean(dists)
-
-        print(f"Done: {s1}")
+        print(f"done: {s1}")
 
     # ----------------------------
     # SYMMETRIZE
@@ -140,7 +138,7 @@ def main():
     dist = (dist + dist.T) / 2
 
     # ----------------------------
-    # CONVERT TO SIMILARITY
+    # NORMALISE TO SIMILARITY
     # ----------------------------
     max_d = dist.max()
     sim = 1 - dist / max_d if max_d > 0 else np.ones_like(dist)
@@ -150,17 +148,19 @@ def main():
     # ----------------------------
     os.makedirs("figures", exist_ok=True)
 
-    plt.figure(figsize=(max(10, n_st * 0.6), max(10, n_st * 0.6)))
+    plt.figure(figsize=(max(10, n * 0.6), max(10, n * 0.6)))
 
     plt.imshow(sim, cmap="viridis", vmin=0, vmax=1, aspect="auto")
-    plt.colorbar(label="PCA + Wasserstein similarity")
+    plt.colorbar(label=f"{args.method} similarity")
 
-    plt.xticks(range(n_st), states, rotation=90, fontsize=6)
-    plt.yticks(range(n_st), states, fontsize=6)
+    plt.xticks(range(n), states, rotation=90, fontsize=6)
+    plt.yticks(range(n), states, fontsize=6)
 
-    # annotations
-    for i in range(n_st):
-        for j in range(n_st):
+    # ----------------------------
+    # CELL VALUES (rounded)
+    # ----------------------------
+    for i in range(n):
+        for j in range(n):
             plt.text(
                 j, i,
                 f"{sim[i, j]:.2f}",
@@ -170,11 +170,11 @@ def main():
                 color="black"
             )
 
-    plt.title(f"PCA + Wasserstein State Similarity\n{args.prefix}")
+    plt.title(f"PCA + {args.method.upper()} State Similarity\n{args.prefix}")
 
     plt.tight_layout()
 
-    out = f"figures/{args.prefix}_pca_wasserstein_similarity.png"
+    out = f"figures/{args.prefix}_pca_{args.method}.png"
     plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.close()
 

@@ -646,17 +646,26 @@ So:
 
 ![](figures/Fibroblast_Osteosarcoma_pca_wasserstein_similarity.png?v=1)
 
-# Cosine / Pearson / Spearman vs PCA + Wasserstein
 
-| Aspect | Cosine / Pearson / Spearman | PCA + Wasserstein |
-|--------|-----------------------------|--------------------|
-| What it reflects | Similarity of **average gene-expression program** | Similarity of **entire cell population structure** |
-| Basic unit of comparison | One vector per (celltype × sample) | Distribution of cells per (celltype × sample) |
-| Data representation | Mean expression across cells | Single-cell embeddings in PCA space |
-| What it tells you | Whether genes are similarly up/down on average | Whether cell states and subpopulations are similarly distributed |
-| Captures heterogeneity? | ❌ No (collapses to mean) | ✅ Yes (keeps full distribution) |
-| Sensitive to rare cell states | ❌ Weak / lost | ✅ Strong |
-| Main biological signal | Transcriptional program similarity | Cellular composition + state shifts |
-| Core intuition | “Do these groups express genes similarly?” | “Do these groups contain similar kinds of cells?” |
+
+## Method 5: PCA-based Maximum Mean Discrepancy (MMD)
+
+##### PCA step (same as Wasserstein)
+- one global PCA is fitted using all cells from all celltypes and samples
+- all cells are projected into this shared PCA space
+- each state = (celltype × sample) becomes a cloud of points in PCA space
+
+---
+
+##### MMD step
+
+Instead of measuring transport distance between two clouds (as in Wasserstein), MMD:
+
+- takes two states A and B (e.g., Osteosarcoma_Reg vs Fibroblast_Uninjured1)
+- compares the statistical difference between the two clouds in PCA space using a kernel function
+- produces a single value that reflects how different the two distributions are
+
+![](figures/Fibroblast_Osteosarcoma_pca_mmd.png?v=1)
+
 
 
