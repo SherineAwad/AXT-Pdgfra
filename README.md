@@ -437,9 +437,35 @@ From the dotplot, cluster 5 doesn't seem to be higlhy expressed in 2 distinct pr
 
 ## Celltype similarity 
 
-### Method 1: Cosine similarity 
+### Method 1: Pearson Correlation 
 
-# Cosine Similarity in This Pipeline (Simple Explanation)
+> whether genes vary together above or below their average in both states
+
+- centers each vector (subtracts mean)
+- captures linear co-variation
+- sensitive to relative up/down shifts
+
+Interpretation:
+> similarity of co-activation patterns relative to mean expression
+> “Do genes go up/down together relative to average?”
+
+![](Fibroblast_Osteosarcoma_pearson_similarity.png?v=1)
+
+### Method 2: Spearman Correlation 
+
+> whether two states agree on the ranking of genes
+
+- converts values into ranks first
+- ignores magnitude completely
+- compares ordering of genes
+
+Interpretation:
+> similarity of gene importance or ranking
+> “Do they agree on which genes are most important?”
+
+![](figures/Osteosarcoma_Reg_spearman_similarity.png?v=1)
+
+### Method 3: Cosine similarity 
 
 ##### 1. What is a “vector” in this analysis?
 
@@ -524,5 +550,5 @@ Cosine similarity tells us:
 
 how similar two biological states are in their transcriptional programs; the alignment of gene expression programs between biological states, ignoring scale and focusing only on expression pattern shape
 
-![](figures/figures/Osteosarcoma_Reg_cosine_similarity.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_cosine_similarity.png?v=1)
 
