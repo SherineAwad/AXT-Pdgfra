@@ -427,3 +427,9 @@ From the dotplot, cluster 5 doesn't seem to be higlhy expressed in 2 distinct pr
 | Osteosarcoma   | 0            | 1116 | 0          | 0           | 0           | 9075    |
 
 
+
+![](figures/Fibroblast_Osteosarcoma_umap.png?v=1)
+
+![](figures/Fibroblast_Osteosarcoma_perSample_umap.png?v=1)
+
+
