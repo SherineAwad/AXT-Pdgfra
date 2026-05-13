@@ -449,7 +449,7 @@ Interpretation:
 > similarity of co-activation patterns relative to mean expression
 > “Do genes go up/down together relative to average?”
 
-![](Fibroblast_Osteosarcoma_pearson_similarity.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pearson_similarity.png?v=1)
 
 ### Method 2: Spearman Correlation 
 
@@ -463,7 +463,7 @@ Interpretation:
 > similarity of gene importance or ranking
 > “Do they agree on which genes are most important?”
 
-![](figures/Osteosarcoma_Reg_spearman_similarity.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_spearman_similarity.png?v=1)
 
 ### Method 3: Cosine similarity 
 
