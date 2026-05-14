@@ -708,15 +708,15 @@ Imagine two clouds of points in PCA space. If the clouds heavily overlap, low tr
 
 | Aspect | Cosine / Pearson / Spearman | PCA + Wasserstein | PCA + MMD | PCA + POT (Sinkhorn) |
 |--------|-----------------------------|--------------------|------------|----------------------|
-| What it reflects | Similarity of **average gene-expression program** | Similarity of **entire cell population structure via transport distance** | Similarity of **entire cell population structure via statistical distribution difference** | Similarity of **entire cell population structure via optimal transport cost** |
+| What it reflects | Similarity of **average gene-expression program** | Similarity of **cell population composition** | Similarity of **cell population composition** | Similarity of **cell population composition** |
 | Basic unit of comparison | One vector per (celltype × sample) | Distribution of cells per (celltype × sample) | Distribution of cells per (celltype × sample) | Distribution of cells per (celltype × sample) |
 | Data representation | Mean expression across cells | Single-cell embeddings in PCA space | Single-cell embeddings in PCA space | Single-cell embeddings in PCA space |
-| What it tells you | Whether genes are similarly up/down on average | Whether cell states and subpopulations can be "morphed" into each other | Whether two cell populations come from the same underlying distribution | Minimal cost to transform one distribution into another |
+| What it tells you | Whether genes are similarly up/down on average | Whether the two populations have the same cellular composition and cell state distribution | Whether the two populations have the same cellular composition and cell state distribution | Whether the two populations have the same cellular composition and cell state distribution |
 | Captures heterogeneity? | ❌ No (collapses to mean) | ✅ Yes (keeps full distribution) | ✅ Yes (keeps full distribution) | ✅ Yes (keeps full distribution) |
 | Sensitive to rare cell states | ❌ Weak / lost | ✅ Strong | ✅ Strong | ✅ Strong |
-| Main biological signal | Transcriptional program similarity | Geometric shift of cell populations | Statistical shift of cell populations | Distribution shift via transport cost |
-| Core intuition | "Do these groups express genes similarly?" | "How much work is needed to transform one cell cloud into another?" | "Do these cell clouds come from the same distribution?" | "What is the cheapest way to move mass from distribution A to distribution B?" |
-| Algorithm | Correlation or cosine similarity | Wasserstein distance (Earth Mover's Distance) | Maximum Mean Discrepancy | Sinkhorn algorithm (entropy-regularized OT) |
+| Main biological signal | Transcriptional program similarity | Cellular composition similarity | Cellular composition similarity | Cellular composition similarity |
+| Core intuition | "Do these groups express genes similarly on average?" | "Do these groups look the same when you look at all cells?" | "Do these groups look the same when you look at all cells?" | "Do these groups look the same when you look at all cells?" |
+| Algorithm | Pearson correlation / Spearman correlation / Cosine similarity | Wasserstein distance (Earth Mover's Distance) | Maximum Mean Discrepancy | Sinkhorn algorithm (entropy-regularized OT) |
 | Computational complexity | O(n) | O(n³) | O(n²) | O(n²) with regularization |
 | Best for | Quick, interpretable average comparisons | Small to medium datasets | Medium datasets with known kernels | Large datasets, handles unbalanced groups |
 
