@@ -704,21 +704,10 @@ Imagine two clouds of points in PCA space. If the clouds heavily overlap, low tr
 
 ![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=1)
 
-# Cosine / Pearson / Spearman vs PCA + Wasserstein vs PCA + MMD vs PCA + POT (Sinkhorn)
-
-| Aspect | Cosine / Pearson / Spearman | PCA + Wasserstein | PCA + MMD | PCA + POT (Sinkhorn) |
-|--------|-----------------------------|--------------------|------------|----------------------|
-| What it reflects | Similarity of **average gene-expression program** | Similarity of **cell population composition** | Similarity of **cell population composition** | Similarity of **cell population composition** |
-| Basic unit of comparison | One vector per (celltype × sample) | Distribution of cells per (celltype × sample) | Distribution of cells per (celltype × sample) | Distribution of cells per (celltype × sample) |
-| Data representation | Mean expression across cells | Single-cell embeddings in PCA space | Single-cell embeddings in PCA space | Single-cell embeddings in PCA space |
-| What it tells you | Whether genes are similarly up/down on average | Whether the two populations have the same cellular composition and cell state distribution | Whether the two populations have the same cellular composition and cell state distribution | Whether the two populations have the same cellular composition and cell state distribution |
-| Captures heterogeneity? | ❌ No (collapses to mean) | ✅ Yes (keeps full distribution) | ✅ Yes (keeps full distribution) | ✅ Yes (keeps full distribution) |
-| Sensitive to rare cell states | ❌ Weak / lost | ✅ Strong | ✅ Strong | ✅ Strong |
-| Main biological signal | Transcriptional program similarity | Cellular composition similarity | Cellular composition similarity | Cellular composition similarity |
-| Core intuition | "Do these groups express genes similarly on average?" | "Do these groups look the same when you look at all cells?" | "Do these groups look the same when you look at all cells?" | "Do these groups look the same when you look at all cells?" |
-| Algorithm | Pearson correlation / Spearman correlation / Cosine similarity | Wasserstein distance (Earth Mover's Distance) | Maximum Mean Discrepancy | Sinkhorn algorithm (entropy-regularized OT) |
-| Computational complexity | O(n) | O(n³) | O(n²) | O(n²) with regularization |
-| Best for | Quick, interpretable average comparisons | Small to medium datasets | Medium datasets with known kernels | Large datasets, handles unbalanced groups |
+| Aspect | Cosine | Pearson | Spearman | PCA + MMD | PCA + Wasserstein | PCA + POT (Sinkhorn) |
+|--------|--------|---------|----------|-----------|-------------------|----------------------|
+| What it reflects | Similarity of which genes are high vs low | Similarity of how much genes go up and down together | Similarity of which genes are highest and lowest ranked | Whether two cell populations have the same cellular composition | Whether two cell populations have the same cellular composition | Whether two cell populations have the same cellular composition |
+| What it tells you | Do the same genes have high expression in both groups? | When one gene goes up, does the same gene go up in the other group? | Do both groups rank genes from most expressed to least expressed in the same order? | Do both groups contain the same cell types and states in the same proportions? | Do both groups contain the same cell types and states in the same proportions? | Do both groups contain the same cell types and states in the same proportions? |
 
 
 ### 🚨🚨🚨 Method 7 SCOT+: SCOT+ is missing -- software issue -- contacting author 
