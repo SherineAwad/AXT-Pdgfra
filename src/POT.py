@@ -73,7 +73,7 @@ def main():
     # =====================================================
     if args.hvg > 0:
         print(f"Filtering to top {args.hvg} highly variable genes...")
-        sc.pp.highly_variable_genes(adata, n_top_genes=args.hvg, batch_key='sample', flavor='seurat_v3')
+        sc.pp.highly_variable_genes(adata, n_top_genes=args.hvg, batch_key='sample', flavor='seurat')
         adata = adata[:, adata.var.highly_variable]
         print(f"Kept {adata.shape[1]} genes")
     else:

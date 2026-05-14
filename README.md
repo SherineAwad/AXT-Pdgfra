@@ -702,7 +702,7 @@ POT answers one question: **What is the minimum cost to transform one distributi
 
 Imagine two clouds of points in PCA space. If the clouds heavily overlap, low transport cost and cells are similar. If the clouds are far apart, high transport cost and cells are different. POT measures the "work" needed to morph one cloud into the other.
 
-![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pot_hvg2000_matrix.png?v=1)
 
 | Aspect | Cosine | Pearson | Spearman | PCA + MMD | PCA + Wasserstein | PCA + POT (Sinkhorn) |
 |--------|--------|---------|----------|-----------|-------------------|----------------------|
