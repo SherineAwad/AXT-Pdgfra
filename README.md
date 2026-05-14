@@ -668,4 +668,54 @@ Instead of measuring transport distance between two clouds (as in Wasserstein), 
 ![](figures/Fibroblast_Osteosarcoma_pca_mmd.png?v=1)
 
 
+## Method 6: Python Optimal Transport 
+
+POT answers one question: **What is the minimum cost to transform one distribution of cells into another distribution of cells?**
+
+##### How It Works
+
+**Step 1: PCA**
+- Reduce gene expression data to ~50 principal components
+- Each cell becomes a point in PCA space
+
+**Step 2: Build Cost Matrix**
+- Calculate distance between every cell in group A and every cell in group B
+- This matrix (M) represents how "expensive" it is to move mass from any A cell to any B cell
+
+**Step 3: Sinkhorn Algorithm**
+- Finds the optimal transport plan (T)
+- T tells you how much mass from each A cell should go to each B cell
+- Minimizes total transport cost
+
+**Step 4: Calculate Similarity**
+- similarity = 1 - (total transport cost)
+- High similarity (close to 1) = distributions overlap well
+- Low similarity (close to 0) = distributions are very different
+
+##### Why POT for Cell Types
+
+- Different number of cells per sample? OT handles unequal group sizes naturally
+- Cell states exist on a continuum? Compares entire distributions, not just averages
+- Two populations can have same mean but different structure? Captures differences in spread, shape, and density
+
+##### Analogy
+
+Imagine two clouds of points in PCA space. If the clouds heavily overlap, low transport cost and cells are similar. If the clouds are far apart, high transport cost and cells are different. POT measures the "work" needed to morph one cloud into the other.
+
+![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=1)
+
+
+# Cosine / Pearson / Spearman vs PCA + Wasserstein vs PCA + MMD
+
+| Aspect | Cosine / Pearson / Spearman | PCA + Wasserstein | PCA + MMD |
+|--------|-----------------------------|--------------------|------------|
+| What it reflects | Similarity of **average gene-expression program** | Similarity of **entire cell population structure via transport distance** | Similarity of **entire cell population structure via statistical distribution difference** |
+| Basic unit of comparison | One vector per (celltype × sample) | Distribution of cells per (celltype × sample) | Distribution of cells per (celltype × sample) |
+| Data representation | Mean expression across cells | Single-cell embeddings in PCA space | Single-cell embeddings in PCA space |
+| What it tells you | Whether genes are similarly up/down on average | Whether cell states and subpopulations can be “morphed” into each other | Whether two cell populations come from the same underlying distribution |
+| Captures heterogeneity? | ❌ No (collapses to mean) | ✅ Yes (keeps full distribution) | ✅ Yes (keeps full distribution) |
+| Sensitive to rare cell states | ❌ Weak / lost | ✅ Strong | ✅ Strong |
+| Main biological signal | Transcriptional program similarity | Geometric shift of cell populations | Statistical shift of cell populations |
+| Core intuition | “Do these groups express genes similarly?” | “How much work is needed to transform one cell cloud into another?” | “Do these cell clouds come from the same distribution?” |
+
 
