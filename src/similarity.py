@@ -55,6 +55,8 @@ def main():
     parser.add_argument("--prefix", required=True)
     parser.add_argument("--method", default="cosine",
                         choices=["cosine", "pearson", "spearman"])
+    parser.add_argument("--hvg", type=int, default=0, 
+                        help="Number of highly variable genes to use (0 = use all genes)")
 
     args = parser.parse_args()
 
@@ -64,15 +66,21 @@ def main():
     celltype_col = "celltype"
     sample_col = "sample"
 
-    print("Selecting HVGs...")
-    sc.pp.highly_variable_genes(
-        adata,
-        n_top_genes=2000,
-        flavor="seurat"
-    )
-
-    genes = adata.var_names[adata.var["highly_variable"]]
-    adata = adata[:, genes].copy()
+    # ----------------------------
+    # OPTIONAL: FILTER TO HIGHLY VARIABLE GENES
+    # ----------------------------
+    if args.hvg > 0:
+        print(f"Selecting top {args.hvg} HVGs...")
+        sc.pp.highly_variable_genes(
+            adata,
+            n_top_genes=args.hvg,
+            flavor="seurat"
+        )
+        genes = adata.var_names[adata.var["highly_variable"]]
+        adata = adata[:, genes].copy()
+        print(f"Kept {adata.shape[1]} genes")
+    else:
+        print("Using all genes")
 
     print("Computing state pseudobulk...")
     profiles = compute_state_pseudobulk(adata, celltype_col, sample_col)
@@ -93,7 +101,8 @@ def main():
     # -------------------------
     # SAVE CSV
     # -------------------------
-    csv_path = f"{args.prefix}_{args.method}_similarity.csv"
+    hvg_text = f"_hvg{args.hvg}" if args.hvg > 0 else ""
+    csv_path = f"{args.prefix}_{args.method}{hvg_text}_similarity.csv"
     sim_df.to_csv(csv_path)
 
     print(f"Saved: {csv_path}")
@@ -128,14 +137,15 @@ def main():
                 fontsize=5
             )
 
-    plt.title(f"Celltype × Sample State Similarity ({args.method})")
+    hvg_title = f"HVG={args.hvg}" if args.hvg > 0 else "All genes"
+    plt.title(f"Celltype × Sample State Similarity ({args.method}) - {hvg_title}")
 
     plt.tight_layout()
 
     os.makedirs("figures", exist_ok=True)
 
     plt.savefig(
-        f"figures/{args.prefix}_{args.method}_similarity.png",
+        f"figures/{args.prefix}_{args.method}{hvg_text}_similarity.png",
         dpi=300,
         bbox_inches="tight"
     )
