@@ -19,14 +19,13 @@ def get_X(adata, layer):
     return X.toarray() if issparse(X) else X
 
 
-def pot_score(A, B):
+def pot_score(A, B, max_cells, min_cells):
     try:
         if A is None or B is None:
             return np.nan
-        if len(A) < 3 or len(B) < 3:
+        if len(A) < min_cells or len(B) < min_cells:
             return np.nan
         
-        max_cells = 500
         if len(A) > max_cells:
             idx = np.random.choice(len(A), max_cells, replace=False)
             A = A[idx]
@@ -57,21 +56,34 @@ def pot_score(A, B):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", required=True)
-    parser.add_argument("--prefix", required=True)
-    parser.add_argument("--layer", default="log1p")
-    parser.add_argument("--n_pcs", type=int, default=50)
+    parser.add_argument("--input", required=True, help="Input h5ad file")
+    parser.add_argument("--prefix", required=True, help="Output prefix")
+    parser.add_argument("--layer", default="log1p", help="Layer to use for expression")
+    parser.add_argument("--n_pcs", type=int, default=50, help="Number of PCs")
+    parser.add_argument("--max_cells", type=int, default=10000, help="Maximum cells to subsample per group")
+    parser.add_argument("--min_cells", type=int, default=3, help="Minimum cells required per group")
+    parser.add_argument("--hvg", type=int, default=0, help="Number of highly variable genes to use (0 = use all genes)")
     args = parser.parse_args()
 
     print("Loading data...")
     adata = sc.read_h5ad(args.input)
 
     # =====================================================
+    # OPTIONAL: FILTER TO HIGHLY VARIABLE GENES
+    # =====================================================
+    if args.hvg > 0:
+        print(f"Filtering to top {args.hvg} highly variable genes...")
+        sc.pp.highly_variable_genes(adata, n_top_genes=args.hvg, batch_key='sample', flavor='seurat_v3')
+        adata = adata[:, adata.var.highly_variable]
+        print(f"Kept {adata.shape[1]} genes")
+    else:
+        print("Using all genes")
+
+    # =====================================================
     # FILTER OUT ZERO-CELL COMBINATIONS
     # =====================================================
     print("Filtering out celltype-sample combinations with zero cells...")
     
-    # Get only combinations that have cells
     valid_groups = adata.obs.groupby(['celltype', 'sample']).size()
     valid_groups = valid_groups[valid_groups > 0]
     
@@ -79,7 +91,6 @@ def main():
     for (ct, s), n in valid_groups.items():
         print(f"  {ct}.{s}: {n} cells")
     
-    # Create filtered list
     celltypes = sorted(set([ct for ct, s in valid_groups.index]))
     samples = sorted(set([s for ct, s in valid_groups.index]))
     
@@ -107,7 +118,7 @@ def main():
     print(f"PCA shape: {X_pca.shape}")
 
     # =====================================================
-    # CREATE STATES DICTIONARY (ONLY VALID ONES)
+    # CREATE STATES DICTIONARY
     # =====================================================
     states = {}
     idx = 0
@@ -128,18 +139,20 @@ def main():
     # =====================================================
     matrix = np.zeros((n_states, n_states))
     
-    print("\nComputing POT similarity...\n")
+    print("\nComputing POT similarity...")
+    print(f"Parameters: max_cells={args.max_cells}, min_cells={args.min_cells}, hvg={args.hvg}\n")
+    
     for i, k1 in enumerate(keys):
         for j, k2 in enumerate(keys):
             if i == j:
                 matrix[i, j] = 1.0
             elif i < j:
-                matrix[i, j] = pot_score(states[k1], states[k2])
+                matrix[i, j] = pot_score(states[k1], states[k2], args.max_cells, args.min_cells)
                 matrix[j, i] = matrix[i, j]
         print(f"  done: {k1[0]}.{k1[1]}")
     
     # =====================================================
-    # PLOT (NO NANs BECAUSE WE EXCLUDED EMPTY GROUPS)
+    # PLOT
     # =====================================================
     os.makedirs("figures", exist_ok=True)
     
@@ -152,7 +165,6 @@ def main():
     plt.xticks(range(n), labels, rotation=90, fontsize=8)
     plt.yticks(range(n), labels, fontsize=8)
     
-    # Add text values
     for i in range(n):
         for j in range(n):
             val = matrix[i, j]
@@ -160,10 +172,11 @@ def main():
                 color = "white" if val < 0.5 else "black"
                 plt.text(j, i, f"{val:.2f}", ha="center", va="center", fontsize=6, color=color)
     
-    plt.title(f"POT similarity\n{args.prefix}")
+    hvg_text = f"_hvg{args.hvg}" if args.hvg > 0 else ""
+    plt.title(f"POT similarity (HVG={args.hvg if args.hvg > 0 else 'all'})\n{args.prefix}")
     plt.tight_layout()
     
-    out = f"figures/{args.prefix}_pot_matrix.png"
+    out = f"figures/{args.prefix}_pot{hvg_text}_matrix.png"
     plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.close()
     
