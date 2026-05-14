@@ -46,6 +46,7 @@ def main():
     parser.add_argument("--method", choices=["wasserstein", "mmd"], default="wasserstein")
     parser.add_argument("--n_pcs", type=int, default=50)
     parser.add_argument("--max_cells", type=int, default=10000)
+    parser.add_argument("--hvg", type=int, default=0, help="Number of highly variable genes to use (0 = use all genes)")
 
     args = parser.parse_args()
 
@@ -54,6 +55,17 @@ def main():
 
     assert "celltype" in adata.obs
     assert "sample" in adata.obs
+
+    # ----------------------------
+    # OPTIONAL: FILTER TO HIGHLY VARIABLE GENES
+    # ----------------------------
+    if args.hvg > 0:
+        print(f"Filtering to top {args.hvg} highly variable genes...")
+        sc.pp.highly_variable_genes(adata, n_top_genes=args.hvg, flavor='seurat')
+        adata = adata[:, adata.var.highly_variable]
+        print(f"Kept {adata.shape[1]} genes")
+    else:
+        print("Using all genes")
 
     # ----------------------------
     # BUILD STATES
@@ -170,11 +182,12 @@ def main():
                 color="black"
             )
 
-    plt.title(f"PCA + {args.method.upper()} State Similarity\n{args.prefix}")
+    hvg_text = f"_hvg{args.hvg}" if args.hvg > 0 else ""
+    plt.title(f"PCA + {args.method.upper()} State Similarity (HVG={args.hvg if args.hvg > 0 else 'all'})\n{args.prefix}")
 
     plt.tight_layout()
 
-    out = f"figures/{args.prefix}_pca_{args.method}.png"
+    out = f"figures/{args.prefix}_pca_{args.method}{hvg_text}.png"
     plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.close()
 
