@@ -99,8 +99,6 @@ Remaining cells after filtering: 11597
 ![](figures/umap_harmony_noHVG_harmony_batch.png?v=2) 
 
 
-![](figures/PCA_harmony_noHVG_pc1_pc2_batch.png?v=2)
-
 ### Clustering 
 
 ![](figures/umap_combined_leiden.png?v=5)
@@ -221,13 +219,15 @@ marker_genes = {
 
 <img src="figures/umap_combined_Bglap.png?v=5" width="33%" />
 
-### Double checking cluster 5 
+### Double checking cluster doublets 
 
-From the dotplot and feature plots,  cluster 5 does not show strong evidence of two distinct co-expressed gene programs.
+From the dotplot and feature plots, 
 
 ![](figures/umap_doublet_score.png?v=2) 
 
 
+
+# FROM HERE NEED A RERUN -- COMING SOON 
 ### Preliminary Annotations 
 
 ![](figures/umap_combined_celltypeON.png?v=9) 
