@@ -1,5 +1,6 @@
 import scanpy as sc
 import argparse
+import os
 
 # -------------------------
 # Args
@@ -29,18 +30,25 @@ adata2.var_names_make_unique()
 # -------------------------
 # Add batch labels BEFORE merging
 # -------------------------
-adata1.obs["batch"] = "input1"
-adata2.obs["batch"] = "input2"
+batch1 = os.path.splitext(os.path.basename(args.input1))[0]
+batch2 = os.path.splitext(os.path.basename(args.input2))[0]
+
+
+batch1 = batch1.replace("_doublets", "")
+batch2 = batch2.replace("_doublets", "")
+
+adata1.obs["batch"] = batch1
+adata2.obs["batch"] = batch2
 
 # -------------------------
 # Merge with OUTER join (keeps all genes)
 # -------------------------
 adata = sc.concat(
     [adata1, adata2],
-    join="outer",           # CHANGED: 'inner' → 'outer'
-    fill_value=0,           # Fill missing genes with 0
-    label="batch",          # Already have batch column, but keep for clarity
-    keys=["input1", "input2"],
+    join="outer",
+    fill_value=0,
+    label="batch",
+    keys=[batch1, batch2],
     index_unique="-"
 )
 

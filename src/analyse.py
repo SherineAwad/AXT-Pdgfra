@@ -28,16 +28,6 @@ def main():
     adata.obs_names_make_unique()
 
     # -------------------------
-    # REMOVE RIBOSOMAL GENES
-    # -------------------------
-    ribo_genes = [
-    g for g in adata.var_names
-    if g.lower().startswith(('rpl', 'rps', 'mrpl', 'mrps'))]
-
-    print(f"Removing {len(ribo_genes)} ribosomal genes")
-    adata = adata[:, ~adata.var_names.isin(ribo_genes)]
-
-    # -------------------------
     # NORMALISATION
     # -------------------------
     sc.pp.normalize_total(adata, target_sum=1e4)
