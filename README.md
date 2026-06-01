@@ -229,9 +229,9 @@ From the dotplot and feature plots,
 
 ### Preliminary Annotations 
 
-![](figures/umap_combined_celltypeON.png?v=10) 
+![](figures/umap_combined_celltypeON.png?v=11) 
 
-![](figures/umap_combined_celltype.png?v=10)
+![](figures/umap_combined_celltype.png?v=11)
 
 
 # From here requires re-running -- ocming soon 
@@ -239,19 +239,15 @@ From the dotplot and feature plots,
 
 ## Celltype Composition by Sample
 
-| celltype      | NonReg_14DPA | Reg  | Reg_14DPA | Uninjured1 | Uninjured2 | nonReg |
-|----------------|--------------|------|------------|-------------|-------------|---------|
-| Fibroblast     | 590          | 0    | 380        | 1057        | 873         | 0       |
-| Osteosarcoma   | 0            | 1116 | 0          | 0           | 0           | 9075    |
+| celltype      | Non_Regen_14_DPA | Reg | Regen_14_DPA | Uninjured1 | Uninjured2 | nonReg |
+|---------------|------------------|-----|--------------|-------------|-------------|--------|
+| Fibroblast    | 744              | 0   | 638          | 1663        | 3011        | 0      |
+| Osteosarcoma  | 0                | 1108| 0            | 0           | 0           | 8940   |
 
 
+![](figures/Fibroblast_Osteosarcoma_umap.png?v=2)
 
-![](figures/Fibroblast_Osteosarcoma_umap.png?v=1)
-
-![](figures/Fibroblast_Osteosarcoma_perSample_umap.png?v=1)
-
-
-
+![](figures/Fibroblast_Osteosarcoma_perSample_umap.png?v=2)
 
 ## Celltype similarity 
 
