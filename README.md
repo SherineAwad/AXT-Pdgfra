@@ -227,13 +227,14 @@ From the dotplot and feature plots,
 
 
 
-# FROM HERE NEED A RERUN -- COMING SOON 
 ### Preliminary Annotations 
 
-![](figures/umap_combined_celltypeON.png?v=9) 
+![](figures/umap_combined_celltypeON.png?v=10) 
 
-![](figures/umap_combined_celltype.png?v=9)
+![](figures/umap_combined_celltype.png?v=10)
 
+
+# From here requires re-running -- ocming soon 
 ### Now lets subset Fibroblast from GSE135985 and Osteosarcoma from AXT 
 
 ## Celltype Composition by Sample
