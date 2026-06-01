@@ -459,7 +459,7 @@ So:
 - 0 → completely different distributions
 
 
-![](figures/Fibroblast_Osteosarcom_pca_wasserstein.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pca_wasserstein.png?v=1)
 
 
 ## Method 5: PCA-based Maximum Mean Discrepancy (MMD)
@@ -479,7 +479,7 @@ Instead of measuring transport distance between two clouds (as in Wasserstein), 
 - compares the statistical difference between the two clouds in PCA space using a kernel function
 - produces a single value that reflects how different the two distributions are
 
-![](figures/Fibroblast_Osteosarcom_pca_mmd.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pca_mmd.png?v=1)
 
 ## Method 6: Python Optimal Transport 
 
