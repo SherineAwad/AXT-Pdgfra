@@ -263,7 +263,7 @@ Interpretation:
 > similarity of co-activation patterns relative to mean expression
 > “Do genes go up/down together relative to average?”
 
-![](figures/Fibroblast_Osteosarcoma_pearson_hvg2000_similarity.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pearson_similarity.png ?v=1)
 
 ### Method 2: Spearman Correlation 
 
@@ -278,7 +278,7 @@ Interpretation:
 > “Do they agree on which genes are most important?”
 
 
-![](figures/Fibroblast_Osteosarcoma_spearman_hvg2000_similarity.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_spearman_similarity.png?v=1)
 
 ### Method 3: Cosine similarity 
 
@@ -365,7 +365,7 @@ Cosine similarity tells us:
 
 how similar two biological states are in their transcriptional programs; the alignment of gene expression programs between biological states, ignoring scale and focusing only on expression pattern shape
 
-![](figures/Fibroblast_Osteosarcoma_cosine_hvg2000_similarity.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_cosine_similarity.png?v=1)
 
 ### Method 4: PCA + Wasserstein Distance 
 
@@ -459,7 +459,7 @@ So:
 - 0 → completely different distributions
 
 
-![](figures/Fibroblast_Osteosarcom_pca_wasserstein_hvg2000.png?v=1)
+![](figures/Fibroblast_Osteosarcom_pca_wasserstein.png?v=1)
 
 
 ## Method 5: PCA-based Maximum Mean Discrepancy (MMD)
@@ -479,7 +479,7 @@ Instead of measuring transport distance between two clouds (as in Wasserstein), 
 - compares the statistical difference between the two clouds in PCA space using a kernel function
 - produces a single value that reflects how different the two distributions are
 
-![](figures/Fibroblast_Osteosarcom_pca_mmd_hvg2000.png?v=1)
+![](figures/Fibroblast_Osteosarcom_pca_mmd.png?v=1)
 
 ## Method 6: Python Optimal Transport 
 
@@ -515,7 +515,7 @@ POT answers one question: **What is the minimum cost to transform one distributi
 
 Imagine two clouds of points in PCA space. If the clouds heavily overlap, low transport cost and cells are similar. If the clouds are far apart, high transport cost and cells are different. POT measures the "work" needed to morph one cloud into the other.
 
-![](figures/Fibroblast_Osteosarcoma_pot_hvg2000_matrix.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=1)
 
 | Aspect | Cosine | Pearson | Spearman | PCA + MMD | PCA + Wasserstein | PCA + POT (Sinkhorn) |
 |--------|--------|---------|----------|-----------|-------------------|----------------------|
