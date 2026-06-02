@@ -5,10 +5,9 @@ import scanpy as sc
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import issparse
-from scipy.stats import wasserstein_distance
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import pairwise_kernels
+from sklearn.metrics import pairwise_kernels, pairwise_distances
 import os
 import warnings
 
@@ -20,17 +19,22 @@ warnings.simplefilter("ignore", RuntimeWarning)
 # ----------------------------
 def get_X(adata):
     X = adata.X
-    return X.toarray() if issparse(X) else X
+    if issparse(X):
+        return X.toarray()
+    return np.asarray(X)
 
 
 # ----------------------------
-# MMD (simple kernel version)
+# MMD ONLY
 # ----------------------------
 def compute_mmd(X, Y):
-    # RBF kernel (default gamma auto)
-    Kxx = pairwise_kernels(X, X, metric="rbf")
-    Kyy = pairwise_kernels(Y, Y, metric="rbf")
-    Kxy = pairwise_kernels(X, Y, metric="rbf")
+    Z = np.vstack([X, Y])
+    dists = pairwise_distances(Z, metric="euclidean")
+    gamma = 1.0 / (np.median(dists) ** 2 + 1e-8)
+
+    Kxx = pairwise_kernels(X, X, metric="rbf", gamma=gamma)
+    Kyy = pairwise_kernels(Y, Y, metric="rbf", gamma=gamma)
+    Kxy = pairwise_kernels(X, Y, metric="rbf", gamma=gamma)
 
     return Kxx.mean() + Kyy.mean() - 2 * Kxy.mean()
 
@@ -43,10 +47,9 @@ def main():
 
     parser.add_argument("--input", required=True)
     parser.add_argument("--prefix", required=True)
-    parser.add_argument("--method", choices=["wasserstein", "mmd"], default="wasserstein")
     parser.add_argument("--n_pcs", type=int, default=50)
     parser.add_argument("--max_cells", type=int, default=10000)
-    parser.add_argument("--hvg", type=int, default=0, help="Number of highly variable genes to use (0 = use all genes)")
+    parser.add_argument("--hvg", type=int, default=0)
 
     args = parser.parse_args()
 
@@ -56,20 +59,10 @@ def main():
     assert "celltype" in adata.obs
     assert "sample" in adata.obs
 
-    # ----------------------------
-    # OPTIONAL: FILTER TO HIGHLY VARIABLE GENES
-    # ----------------------------
     if args.hvg > 0:
-        print(f"Filtering to top {args.hvg} highly variable genes...")
-        sc.pp.highly_variable_genes(adata, n_top_genes=args.hvg, flavor='seurat')
+        sc.pp.highly_variable_genes(adata, n_top_genes=args.hvg, flavor="seurat")
         adata = adata[:, adata.var.highly_variable]
-        print(f"Kept {adata.shape[1]} genes")
-    else:
-        print("Using all genes")
 
-    # ----------------------------
-    # BUILD STATES
-    # ----------------------------
     adata.obs["state"] = (
         adata.obs["celltype"].astype(str)
         + "_"
@@ -77,13 +70,8 @@ def main():
     )
 
     states = sorted(adata.obs["state"].unique())
-    print(f"Found {len(states)} states")
-
     rng = np.random.default_rng(42)
 
-    # ----------------------------
-    # COLLECT DATA
-    # ----------------------------
     state_data = {}
     all_X = []
 
@@ -100,16 +88,12 @@ def main():
 
     X_all = np.vstack(all_X)
 
-    print("Fitting PCA...")
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X_all)
 
     pca = PCA(n_components=min(args.n_pcs, X_scaled.shape[1], X_scaled.shape[0]))
     pca.fit(X_scaled)
 
-    # ----------------------------
-    # PROJECT STATES
-    # ----------------------------
     proj = {}
 
     for st in states:
@@ -117,77 +101,46 @@ def main():
         Xs = scaler.transform(X)
         proj[st] = pca.transform(Xs)
 
-    # ----------------------------
-    # DISTANCE MATRIX
-    # ----------------------------
     n = len(states)
     dist = np.zeros((n, n))
 
-    print(f"Computing {args.method} distances...")
-
     for i, s1 in enumerate(states):
-        for j, s2 in enumerate(states):
+        for j in range(i, n):
+
+            s2 = states[j]
 
             A = proj[s1]
             B = proj[s2]
 
-            if args.method == "wasserstein":
-                n_pcs = min(A.shape[1], B.shape[1])
-                dists = [
-                    wasserstein_distance(A[:, k], B[:, k])
-                    for k in range(n_pcs)
-                ]
-                dist[i, j] = np.mean(dists)
+            d = compute_mmd(A, B)
 
-            elif args.method == "mmd":
-                dist[i, j] = compute_mmd(A, B)
+            dist[i, j] = d
+            dist[j, i] = d
 
         print(f"done: {s1}")
 
-    # ----------------------------
-    # SYMMETRIZE
-    # ----------------------------
-    dist = (dist + dist.T) / 2
+    sim = np.exp(-dist)
 
-    # ----------------------------
-    # NORMALISE TO SIMILARITY
-    # ----------------------------
-    max_d = dist.max()
-    sim = 1 - dist / max_d if max_d > 0 else np.ones_like(dist)
-
-    # ----------------------------
-    # PLOT
-    # ----------------------------
     os.makedirs("figures", exist_ok=True)
 
     plt.figure(figsize=(max(10, n * 0.6), max(10, n * 0.6)))
 
     plt.imshow(sim, cmap="viridis", vmin=0, vmax=1, aspect="auto")
-    plt.colorbar(label=f"{args.method} similarity")
+    plt.colorbar(label="MMD similarity")
 
     plt.xticks(range(n), states, rotation=90, fontsize=6)
     plt.yticks(range(n), states, fontsize=6)
 
-    # ----------------------------
-    # CELL VALUES (rounded)
-    # ----------------------------
     for i in range(n):
         for j in range(n):
-            plt.text(
-                j, i,
-                f"{sim[i, j]:.2f}",
-                ha="center",
-                va="center",
-                fontsize=5,
-                color="black"
-            )
+            plt.text(j, i, f"{sim[i, j]:.2f}",
+                     ha="center", va="center", fontsize=5, color="black")
 
-    hvg_text = f"_hvg{args.hvg}" if args.hvg > 0 else ""
-    plt.title(f"PCA + {args.method.upper()} State Similarity (HVG={args.hvg if args.hvg > 0 else 'all'})\n{args.prefix}")
+    plt.title(f"PCA + MMD State Similarity\n{args.prefix}")
 
     plt.tight_layout()
 
-    out = f"figures/{args.prefix}_pca_{args.method}{hvg_text}.png"
+    out = f"figures/{args.prefix}_pca_mmd.png"
     plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.close()
 

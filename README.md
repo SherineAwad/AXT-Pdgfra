@@ -291,23 +291,21 @@ From the dotplot and feature plots,
 - **Spearman** cares about gene order/ranking.
 - **Cosine** cares about expression pattern shape.
 
-![](figures/Fibroblast_Osteosarcoma_pearson_similarity.png ?v=1)
+![](figures/Fibroblast_Osteosarcoma_pearson_similarity.png?v=1)
 
 ![](figures/Fibroblast_Osteosarcoma_spearman_similarity.png?v=1)
 
 ![](figures/Fibroblast_Osteosarcoma_cosine_similarity.png?v=1)
 
-### Using PCA (Wasserstein, MMD, and Optimal Transport) 
+### Using PCA (MMD, and Optimal Transport) 
  
 | Method | What it asks |
 |----------|-------------|
-| **PCA + Wasserstein** | "How different are the overall cell-state distributions between these groups?" |
 | **PCA + MMD** | "Do these groups come from the same underlying cellular population?" |
 | **PCA + OT (Sinkhorn/POT)** | "How easily can cells from one group be matched to cells in the other group?" |
 
 ### Quick interpretation
 
-- **PCA + Wasserstein** → Compares where cells are located across the overall cellular landscape.
 - **PCA + MMD** → Compares whether the overall population structure looks the same.
 - **PCA + OT (Sinkhorn/POT)** → Compares how well cells from one group can be aligned to cells from another group.
 
@@ -330,13 +328,12 @@ So they can detect differences in:
 even when the average expression profile looks similar.
 
 
-![](figures/Fibroblast_Osteosarcoma_pca_wasserstein.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pca_mmd.png?v=2) 
 
-![](figures/Fibroblast_Osteosarcoma_pca_mmd.png?v=1)
+![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=3) 
 
-![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=2) 
 
-### 🚨🚨🚨 Method 7 SCOT+: SCOT+ is missing -- software issue -- contacting author 
+### 🚨🚨🚨 SCOT+ approach: SCOT+ is missing -- software issue -- contacting author 
 
 
 
