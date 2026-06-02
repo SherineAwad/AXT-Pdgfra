@@ -5,6 +5,8 @@ This project combines our **AXT dataset** with publicly available single-cell RN
 ## Our Dataset
 - AXT dataset: https://github.com/SherineAwad/AXT
 
+🔺🔺🔺 Aligned to reference genome GRCm39 and EGFP sequence is added 
+
 ## External Dataset (GSE135985)
 
 The following samples were integrated:
@@ -13,6 +15,8 @@ The following samples were integrated:
 - **GSM4038982** — Uninjured_scRNA-seq  
 - **GSM4038983** — Uninjured_2_scRNA-seq  
 - **GSM4038986** — Non_Regen_14 DPA_scRNA-seq  
+
+🔺🔺🔺 Raw files were pulled from GEO and re-aligned to GRCm39
 
 ## Objective
 
@@ -97,7 +101,6 @@ Remaining cells after filtering: 11597
 ##  🟢 🟢 🟢 Harmony using All Genes ~30k genes
 
 ![](figures/umap_harmony_noHVG_harmony_batch.png?v=2) 
-
 
 ### Clustering 
 
