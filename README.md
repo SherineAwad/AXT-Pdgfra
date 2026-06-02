@@ -102,6 +102,24 @@ Remaining cells after filtering: 11597
 
 ![](figures/umap_harmony_noHVG_harmony_batch.png?v=2) 
 
+
+### A look into PCAs top genes
+
+```md
+
+### PC0
+**POS:** Tmsb4x, Srgn, Fth1, Cd74, Ctss, Plek, Fcer1g, Lcp1, Cd52, Lyz2  
+**NEG:** Col1a1, Col1a2, Col3a1, Fn1, Col5a2, Sparc, Col6a3, Nedd4, Serpinh1, Cald1  
+
+### PC1
+**POS:** Igfbp7, Dcn, Bgn, Sparc, Serping1, Fstl1, Lum, Gsn, Plpp3, Igfbp5  
+**NEG:** Cmss1, Lars2, Camk1d, Cdk8, Ctss, Cd74, H2-Aa, EGFP, Srgn, Fabp5  
+
+### PC2
+**POS:** Cmss1, Camk1d, Lars2, Cdk8, Gphn, Mast4, Ext1, Apbb2, Zeb1, Zbtb20  
+**NEG:** Fth1, Ppia, Crip1, Ftl1, Lgals3, Lgals1, S100a6, Nme2, Gapdh, S100a11  
+```
+
 ### Clustering 
 
 ![](figures/umap_combined_leiden.png?v=5)
@@ -254,277 +272,70 @@ From the dotplot and feature plots,
 
 ## Celltype similarity 
 
-### Method 1: Pearson Correlation 
+### Using Pearson correlation, Spearman Correlation, and Cosine similarity 
 
-> whether genes vary together above or below their average in both states
+| Method | What it asks |
+|----------|-------------|
+| **Pearson** | "Do the same genes increase and decrease together?" |
+| **Spearman** | "Do genes keep the same rank order?" |
+| **Cosine** | "Do the two groups have the same overall expression pattern?" |
 
-- centers each vector (subtracts mean)
-- captures linear co-variation
-- sensitive to relative up/down shifts
+### Quick interpretation
 
-Interpretation:
-> similarity of co-activation patterns relative to mean expression
-> “Do genes go up/down together relative to average?”
+- **Pearson** → Similarity of gene expression changes.
+- **Spearman** → Similarity of gene rankings.
+- **Cosine** → Similarity of the overall transcriptional program.
+
+### Main difference
+
+- **Pearson** cares about expression values.
+- **Spearman** cares about gene order/ranking.
+- **Cosine** cares about expression pattern shape.
 
 ![](figures/Fibroblast_Osteosarcoma_pearson_similarity.png ?v=1)
 
-### Method 2: Spearman Correlation 
-
-> whether two states agree on the ranking of genes
-
-- converts values into ranks first
-- ignores magnitude completely
-- compares ordering of genes
-
-Interpretation:
-> similarity of gene importance or ranking
-> “Do they agree on which genes are most important?”
-
-
 ![](figures/Fibroblast_Osteosarcoma_spearman_similarity.png?v=1)
-
-### Method 3: Cosine similarity 
-
-##### 1. What is a “vector” in this analysis?
-
-Each biological state is defined as:
-
-(celltype × sample)
-
-Example:
-- Osteosarcoma_Reg
-- Fibroblast_Injured1
-
-Each state is converted into a gene expression vector.
-
-If we have 10 genes:
-
-A = [
-  mean expression of gene1 in Osteosarcoma_Reg,
-  mean expression of gene2 in Osteosarcoma_Reg,
-  mean expression of gene3 in Osteosarcoma_Reg,
-  ...
-  mean expression of gene10 in Osteosarcoma_Reg
-]
-
-This is called a pseudobulk expression profile.
-
-So:
-- Vector A = one state (e.g. Osteosarcoma_Reg)
-- Vector B = another state (e.g. Fibroblast_Injured1)
-
----
-
-##### 2. What cosine similarity compares
-
-Cosine similarity compares:
-
-the pattern of gene expression between two states
-
-It does NOT depend on:
-- number of cells
-- absolute expression scale
-- sequencing depth
-
-It only cares about:
-whether genes go up and down together in both states
-
----
-
-##### 3. Mathematical definition
-
-Given two vectors A and B:
-
-cos(A, B) = (A · B) / (||A|| × ||B||)
-
-Where:
-
-Dot product:
-A · B = Σ (Ai × Bi)
-
-Norm (length):
-||A|| = sqrt(Σ Ai²)
-||B|| = sqrt(Σ Bi²)
-
----
-
-##### 4. What this means intuitively
-
-Cosine similarity asks:
-
-“Do these two gene expression profiles point in the same direction?”
-
-- Value = 1 → identical pattern
-- Value = 0 → unrelated patterns
-- Value = -1 → opposite patterns (rare in expression data)
-
----
-
-##### 5. Biological interpretation
-
-Each vector is a cell state signature.
-
-Cosine similarity tells us:
-
-how similar two biological states are in their transcriptional programs; the alignment of gene expression programs between biological states, ignoring scale and focusing only on expression pattern shape
 
 ![](figures/Fibroblast_Osteosarcoma_cosine_similarity.png?v=1)
 
-### Method 4: PCA + Wasserstein Distance 
+### Using PCA (Wasserstein, MMD, and Optimal Transport) 
+ 
+| Method | What it asks |
+|----------|-------------|
+| **PCA + Wasserstein** | "How different are the overall cell-state distributions between these groups?" |
+| **PCA + MMD** | "Do these groups come from the same underlying cellular population?" |
+| **PCA + OT (Sinkhorn/POT)** | "How easily can cells from one group be matched to cells in the other group?" |
 
-#####  What is being compared?
+### Quick interpretation
 
-Each data point is a **state**:
+- **PCA + Wasserstein** → Compares where cells are located across the overall cellular landscape.
+- **PCA + MMD** → Compares whether the overall population structure looks the same.
+- **PCA + OT (Sinkhorn/POT)** → Compares how well cells from one group can be aligned to cells from another group.
 
-(celltype × sample)
+### Main difference from Pearson / Spearman / Cosine
 
-Example states:
-- Osteosarcoma_Reg
-- Osteosarcoma_nonReg
-- Fibroblast_14DPA
-- Fibroblast_Uninjured1
+Pearson, Spearman and Cosine compare:
 
-Each state contains many single cells.
+> One average expression profile vs another average expression profile.
 
-So instead of comparing single vectors, we compare:
-> **distributions of cells**
+PCA + Wasserstein, MMD and OT compare:
 
----
+> Entire populations of cells vs entire populations of cells.
 
-##### Step 1: Represent cells in a shared space (PCA)
+So they can detect differences in:
+- cell-state composition
+- population structure
+- subpopulations
+- distribution of cells across states
 
-All cells from all states are combined and projected into PCA space.
-
-Each cell becomes:
-
-(x₁, x₂, x₃, ..., xₙ)
-
-Where:
-- each axis = principal component
-- PCA captures main sources of variation in gene expression
-
-So now:
-> each state = a cloud of points in PCA space
-
----
-
-##### Step 2: Each state becomes a distribution
-
-For each state:
-
-- collect all its cells
-- represent them in PCA space
-
-So instead of a single vector, you now have:
-
-> a **distribution of points per state**
-
-Example:
-- Osteosarcoma_Reg → cloud A
-- Fibroblast_Injured1 → cloud B
-
----
-
-##### Step 3: Compare distributions (Wasserstein distance)
-
-Wasserstein distance measures:
-
-> how much “work” is needed to move one distribution into another
-
-Intuition:
-- if two clouds overlap → low distance
-- if they are far apart → high distance
-
-It compares:
-> shape + spread + location of cell populations
-
----
-
-##### Step 4: Per-PC comparison
-
-Instead of comparing full high-dimensional distributions at once, your implementation:
-
-- compares each PCA dimension separately
-- computes Wasserstein distance per PC
-- averages across PCs
-
-
----
-
-##### Step 5: Convert distance → similarity
-
-Since Wasserstein is a **distance (bigger = more different)**:
-
-similarity = 1 - normalized_distance
-
-So:
-- 1 → identical distributions
-- 0 → completely different distributions
+even when the average expression profile looks similar.
 
 
 ![](figures/Fibroblast_Osteosarcoma_pca_wasserstein.png?v=1)
 
-
-## Method 5: PCA-based Maximum Mean Discrepancy (MMD)
-
-##### PCA step (same as Wasserstein)
-- one global PCA is fitted using all cells from all celltypes and samples
-- all cells are projected into this shared PCA space
-- each state = (celltype × sample) becomes a cloud of points in PCA space
-
----
-
-##### MMD step
-
-Instead of measuring transport distance between two clouds (as in Wasserstein), MMD:
-
-- takes two states A and B (e.g., Osteosarcoma_Reg vs Fibroblast_Uninjured1)
-- compares the statistical difference between the two clouds in PCA space using a kernel function
-- produces a single value that reflects how different the two distributions are
-
 ![](figures/Fibroblast_Osteosarcoma_pca_mmd.png?v=1)
 
-## Method 6: Python Optimal Transport 
-
-POT answers one question: **What is the minimum cost to transform one distribution of cells into another distribution of cells?**
-
-##### How It Works
-
-**Step 1: PCA**
-- Reduce gene expression data to ~50 principal components
-- Each cell becomes a point in PCA space
-
-**Step 2: Build Cost Matrix**
-- Calculate distance between every cell in group A and every cell in group B
-- This matrix (M) represents how "expensive" it is to move mass from any A cell to any B cell
-
-**Step 3: Sinkhorn Algorithm**
-- Finds the optimal transport plan (T)
-- T tells you how much mass from each A cell should go to each B cell
-- Minimizes total transport cost
-
-**Step 4: Calculate Similarity**
-- similarity = 1 - (total transport cost)
-- High similarity (close to 1) = distributions overlap well
-- Low similarity (close to 0) = distributions are very different
-
-##### Why POT for Cell Types
-
-- Different number of cells per sample? OT handles unequal group sizes naturally
-- Cell states exist on a continuum? Compares entire distributions, not just averages
-- Two populations can have same mean but different structure? Captures differences in spread, shape, and density
-
-##### Analogy
-
-Imagine two clouds of points in PCA space. If the clouds heavily overlap, low transport cost and cells are similar. If the clouds are far apart, high transport cost and cells are different. POT measures the "work" needed to morph one cloud into the other.
-
-![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=1)
-
-| Aspect | Cosine | Pearson | Spearman | PCA + MMD | PCA + Wasserstein | PCA + POT (Sinkhorn) |
-|--------|--------|---------|----------|-----------|-------------------|----------------------|
-| What it reflects | Similarity of which genes are high vs low | Similarity of how much genes go up and down together | Similarity of which genes are highest and lowest ranked | Whether two cell populations have the same cellular composition | Whether two cell populations have the same cellular composition | Whether two cell populations have the same cellular composition |
-| What it tells you | Do the same genes have high expression in both groups? | When one gene goes up, does the same gene go up in the other group? | Do both groups rank genes from most expressed to least expressed in the same order? | Do both groups contain the same cell types and states in the same proportions? | Do both groups contain the same cell types and states in the same proportions? | Do both groups contain the same cell types and states in the same proportions? |
-
+![](figures/Fibroblast_Osteosarcoma_pot_matrix.png?v=2) 
 
 ### 🚨🚨🚨 Method 7 SCOT+: SCOT+ is missing -- software issue -- contacting author 
 
